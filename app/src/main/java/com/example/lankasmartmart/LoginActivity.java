@@ -8,12 +8,17 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.text.TextPaint;
 
 public class LoginActivity extends AppCompatActivity {
 
     EditText emailEditText, passwordEditText;
     Button loginButton;
     TextView signUpText, forgotPasswordText, googleSignInText;
+    TextView appTitleText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,17 @@ public class LoginActivity extends AppCompatActivity {
         signUpText = findViewById(R.id.signUpText);
         forgotPasswordText = findViewById(R.id.forgotPasswordText);
         googleSignInText = findViewById(R.id.googleSignInText);
+
+        appTitleText = findViewById(R.id.appTitleText);
+        TextPaint paint = appTitleText.getPaint();
+        float width = paint.measureText("Lanka Smart Mart");
+
+        Shader textShader = new LinearGradient(0, 0, 0, appTitleText.getTextSize(),
+                new int[]{
+                        Color.parseColor("#205C3D"),
+                        Color.parseColor("#42D78A"),
+                }, null, Shader.TileMode.CLAMP);
+        appTitleText.getPaint().setShader(textShader);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override

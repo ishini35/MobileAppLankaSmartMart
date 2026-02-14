@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Checked state - shows checkmark -->
+    <item android:state_checked="true" android:drawable="@drawable/ic_cb_checked"/>
+
+    <!-- Unchecked state - shows empty box -->
+    <item android:state_checked="false" android:drawable="@drawable/ic_cb_unchecked"/>
+
+</selector>

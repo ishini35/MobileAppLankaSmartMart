@@ -4,25 +4,36 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView welcomeText;
+    TextView welcomeText, profileName, profileEmail;
     EditText searchEditText;
+    ImageView menuIcon, closeMenu;
+    RelativeLayout profileOverlay;
     LinearLayout groceriesCategory, householdCategory, personalCareCategory, stationeryCategory;
     LinearLayout navHome, navCategories, navCart, navProfile;
+    LinearLayout menuNotifications, menuSettings, menuBarcode, menuOrderHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialize views
         welcomeText = findViewById(R.id.welcomeText);
         searchEditText = findViewById(R.id.searchEditText);
+        menuIcon = findViewById(R.id.menuIcon);
+        closeMenu = findViewById(R.id.closeMenu);
+        profileOverlay = findViewById(R.id.profileOverlay);
+        profileName = findViewById(R.id.profileName);
+        profileEmail = findViewById(R.id.profileEmail);
 
         groceriesCategory = findViewById(R.id.groceriesCategory);
         householdCategory = findViewById(R.id.householdCategory);
@@ -34,12 +45,76 @@ public class MainActivity extends AppCompatActivity {
         navCart = findViewById(R.id.navCart);
         navProfile = findViewById(R.id.navProfile);
 
+        menuNotifications = findViewById(R.id.menuNotifications);
+        menuSettings = findViewById(R.id.menuSettings);
+        menuBarcode = findViewById(R.id.menuBarcode);
+        menuOrderHistory = findViewById(R.id.menuOrderHistory);
+
+        // Get user data from intent
         Intent intent = getIntent();
         String userName = intent.getStringExtra("USER_NAME");
-        if (userName != null) {
-            welcomeText.setText("Hello, " + userName + " !");
+        String userEmail = intent.getStringExtra("USER_EMAIL");
+
+        // ✅ Extract name from email if USER_NAME is not provided
+        if (userName == null || userName.isEmpty()) {
+            if (userEmail != null && !userEmail.isEmpty()) {
+                // Extract name from email (part before @)
+                String emailName = userEmail.split("@")[0];
+
+                // Replace dots and underscores with spaces
+                emailName = emailName.replace(".", " ").replace("_", " ");
+
+                // Capitalize each word
+                String[] words = emailName.split(" ");
+                StringBuilder capitalizedName = new StringBuilder();
+                for (String word : words) {
+                    if (word.length() > 0) {
+                        capitalizedName.append(word.substring(0, 1).toUpperCase())
+                                .append(word.substring(1).toLowerCase())
+                                .append(" ");
+                    }
+                }
+                userName = capitalizedName.toString().trim();
+            } else {
+                userName = "User"; // Default fallback
+            }
         }
 
+        // ✅ Set welcome text and profile info
+        welcomeText.setText("Hello, " + userName + " !");
+        profileName.setText(userName);
+
+        if (userEmail != null && !userEmail.isEmpty()) {
+            profileEmail.setText(userEmail);
+        } else {
+            profileEmail.setText("No email provided");
+        }
+
+        // Menu icon click - show overlay
+        menuIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileOverlay.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Close menu
+        closeMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileOverlay.setVisibility(View.GONE);
+            }
+        });
+
+        // Hide overlay when clicking outside
+        profileOverlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileOverlay.setVisibility(View.GONE);
+            }
+        });
+
+        // Category clicks
         groceriesCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Bottom navigation
         navHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,10 +168,40 @@ public class MainActivity extends AppCompatActivity {
         navProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Logout", Toast.LENGTH_SHORT).show();
-                Intent logoutIntent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(logoutIntent);
-                finish();
+                profileOverlay.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Profile menu items
+        menuNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Notifications", Toast.LENGTH_SHORT).show();
+                profileOverlay.setVisibility(View.GONE);
+            }
+        });
+
+        menuSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                profileOverlay.setVisibility(View.GONE);
+            }
+        });
+
+        menuBarcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Barcode Scanner", Toast.LENGTH_SHORT).show();
+                profileOverlay.setVisibility(View.GONE);
+            }
+        });
+
+        menuOrderHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "Order History", Toast.LENGTH_SHORT).show();
+                profileOverlay.setVisibility(View.GONE);
             }
         });
     }

@@ -53,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("USER_NAME", email);
+                    intent.putExtra("USER_EMAIL", email);  // ✅ CHANGED: USER_NAME → USER_EMAIL
                     startActivity(intent);
                     finish();
                 }

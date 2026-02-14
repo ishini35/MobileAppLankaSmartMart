@@ -14,12 +14,14 @@
 
         <!-- App Title -->
         <TextView
+            android:id="@+id/appTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Lanka Smart Mart"
             android:textColor="#3D9970"
             android:textSize="28sp"
             android:textStyle="bold"
+            android:fontFamily="poppins"
             android:layout_marginTop="60dp"
             android:layout_marginBottom="20dp"/>
 
@@ -29,8 +31,9 @@
             android:layout_height="wrap_content"
             android:text="Welcome Back!"
             android:textColor="#000000"
-            android:textSize="26sp"
+            android:textSize="24sp"
             android:textStyle="bold"
+            android:fontFamily="poppins"
             android:layout_marginBottom="8dp"/>
 
         <!-- Sign in to continue -->
@@ -38,31 +41,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign in to continue"
-            android:textColor="#808080"
+            android:textColor="#646464"
             android:textSize="16sp"
+            android:fontFamily="inter"
             android:layout_marginBottom="40dp"/>
 
         <!-- Email Input -->
         <EditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:hint="Email or phone number"
             android:inputType="textEmailAddress"
-            android:padding="16dp"
-            android:background="@android:drawable/edit_text"
+            android:textColor="#000000"
+            android:textColorHint="#BCBCBC"
+            android:background="@drawable/edittext_border"
+            android:drawableStart="@drawable/ic_email_small"
+            android:drawablePadding="12dp"
+            android:textSize="16sp"
+            android:fontFamily="inter"
             android:layout_marginBottom="16dp"/>
 
         <!-- Password Input -->
         <EditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:hint="Password"
             android:inputType="textPassword"
-            android:padding="16dp"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginBottom="12dp"/>
+            android:textColor="#000000"
+            android:textColorHint="#BCBCBC"
+            android:background="@drawable/edittext_border"
+            android:drawableStart="@android:drawable/ic_lock_idle_lock"
+            android:drawableEnd="@android:drawable/ic_menu_view"
+            android:drawablePadding="12dp"
+            android:textSize="16sp"
+            android:fontFamily="inter"
+            android:layout_marginBottom="16dp"/>
 
         <!-- Forgot Password -->
         <TextView
@@ -72,6 +87,7 @@
             android:text="Forgot Password?"
             android:textColor="#3D9970"
             android:textSize="14sp"
+            android:fontFamily="inter"
             android:layout_gravity="center"
             android:layout_marginBottom="30dp"
             android:clickable="true"/>
@@ -80,10 +96,11 @@
         <Button
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="56dp"
             android:text="Login"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
+            android:fontFamily="inter"
             android:backgroundTint="#3D9970"
             android:layout_marginBottom="20dp"/>
 
@@ -94,6 +111,7 @@
             android:text="OR"
             android:textColor="#808080"
             android:textSize="14sp"
+            android:fontFamily="inter"
             android:layout_marginBottom="20dp"/>
 
         <!-- Sign in with Google -->
@@ -104,6 +122,7 @@
             android:text="Sign in with Google"
             android:textColor="#000000"
             android:textSize="16sp"
+            android:fontFamily="inter"
             android:layout_marginBottom="30dp"
             android:clickable="true"/>
 
@@ -118,7 +137,8 @@
                 android:layout_height="wrap_content"
                 android:text="Don't have an account? "
                 android:textColor="#000000"
-                android:textSize="14sp"/>
+                android:textSize="14sp"
+                android:fontFamily="inter"/>
 
             <TextView
                 android:id="@+id/signUpText"
@@ -128,6 +148,7 @@
                 android:textColor="#3D9970"
                 android:textSize="14sp"
                 android:textStyle="bold"
+                android:fontFamily="inter"
                 android:clickable="true"/>
         </LinearLayout>
 

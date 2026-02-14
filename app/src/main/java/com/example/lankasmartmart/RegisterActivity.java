@@ -1,7 +1,11 @@
 package com.example.lankasmartmart;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,6 +20,7 @@ public class RegisterActivity extends AppCompatActivity {
     CheckBox termsCheckBox;
     Button registerButton;
     TextView logInText;
+    TextView appTitleText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,17 @@ public class RegisterActivity extends AppCompatActivity {
         termsCheckBox = findViewById(R.id.termsCheckBox);
         registerButton = findViewById(R.id.registerButton);
         logInText = findViewById(R.id.logInText);
+
+        appTitleText = findViewById(R.id.appTitleText);
+        TextPaint paint = appTitleText.getPaint();
+        float width = paint.measureText("Lanka Smart Mart");
+
+        Shader textShader = new LinearGradient(0, 0, 0, appTitleText.getTextSize(),
+                new int[]{
+                        Color.parseColor("#205C3D"),
+                        Color.parseColor("#42D78A"),
+                }, null, Shader.TileMode.CLAMP);
+        appTitleText.getPaint().setShader(textShader);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,5 +77,8 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+    public void onTermsTextClick(View view) {
+        termsCheckBox.setChecked(!termsCheckBox.isChecked());
     }
 }

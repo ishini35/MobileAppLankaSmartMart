@@ -1,3 +1,32 @@
 <resources>
-    <string name="app_name">LankaSmartMart</string>
+    <string name="app_name">Lanka Smart Mart</string>
+    <string name="welcome">Welcome</string>
+    <string name="tagline">Providing you the best grocery shopping experience</string>
+    <string name="get_started">Get Started</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="sign_in_continue">Sign in to continue</string>
+    <string name="email_phone">Email or phone number</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="login">Login</string>
+    <string name="or">OR</string>
+    <string name="sign_in_google">Sign in with Google</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="create_account">Create Account</string>
+    <string name="sign_up_started">Sign up to get started</string>
+    <string name="full_name">Full Name</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="agree_terms">I agree to Terms &amp; Conditions</string>
+    <string name="create_account_btn">Create Account</string>
+    <string name="already_account">Already have an account?</string>
+    <string name="log_in">Log in</string>
+    <string name="hello_user">Hello, Kasun !</string>
+    <string name="search_products">Search for products...</string>
+    <string name="new_year_special">New Year Special !</string>
+    <string name="shop_category">Shop by Category</string>
+    <string name="groceries">Groceries</string>
+    <string name="medicine">Medicine</string>
+    <string name="personal_care">Personal Care</string>
+    <string name="stationary">Stationary</string>
 </resources>

@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary_green">#2E7D5F</color>
-    <color name="light_green">#A8D5BA</color>
-    <color name="orange">#FF6B35</color>
+    <!-- Primary Colors -->
+    <color name="primary_green">#3D9970</color>
+    <color name="light_green">#E0F2E9</color>
+    <color name="light_green_dark">#2ECC71</color>
+
+    <!-- Basic Colors -->
     <color name="white">#FFFFFF</color>
-    <color name="gray">#808080</color>
-    <color name="light_gray">#F5F5F5</color>
     <color name="black">#000000</color>
+    <color name="gray">#646464</color>
+    <color name="light_gray">#BCBCBC</color>
+
+    <!-- Gradient Colors for Welcome Text -->
+    <color name="gradient_start">#FF6B6B</color>
+    <color name="gradient_end">#4ECDC4</color>
+
+    <!-- Gradient Colors for App Name (Green) -->
+    <color name="gradient_green_start">#2ECC71</color>
+    <color name="gradient_green_end">#3D9970</color>
+
+    <!-- Gradient Colors for Splash Screen -->
+    <color name="gradient_white_start">#FFFFFF</color>
+    <color name="gradient_white_end">#E0F2E9</color>
 </resources>

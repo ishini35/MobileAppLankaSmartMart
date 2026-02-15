@@ -14,7 +14,6 @@
         android:translationY="-100dp"
         android:background="@drawable/circle_shape" />
 
-
     <!-- Main Content -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,9 +25,6 @@
         android:padding="30dp">
 
         <!-- Person with groceries image -->
-
-        <!-- Welcome Text -->
-
         <ImageView
             android:layout_width="225dp"
             android:layout_height="247dp"
@@ -37,7 +33,9 @@
             android:scaleType="centerCrop"
             android:src="@drawable/bg_welcome" />
 
+        <!-- Welcome Text with Gradient -->
         <TextView
+            android:id="@+id/tvWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -46,8 +44,9 @@
             android:textSize="28sp"
             android:textStyle="bold" />
 
-        <!-- App Name -->
+        <!-- App Name with Gradient -->
         <TextView
+            android:id="@+id/tvAppName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -84,8 +83,8 @@
 
     <!-- Bottom Left Decorative Circle -->
     <View
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="-50dp"

@@ -55,16 +55,12 @@ public class MainActivity extends AppCompatActivity {
         String userName = intent.getStringExtra("USER_NAME");
         String userEmail = intent.getStringExtra("USER_EMAIL");
 
-        // ✅ Extract name from email if USER_NAME is not provided
+        // Extract name from email if USER_NAME is not provided
         if (userName == null || userName.isEmpty()) {
             if (userEmail != null && !userEmail.isEmpty()) {
-                // Extract name from email (part before @)
                 String emailName = userEmail.split("@")[0];
-
-                // Replace dots and underscores with spaces
                 emailName = emailName.replace(".", " ").replace("_", " ");
 
-                // Capitalize each word
                 String[] words = emailName.split(" ");
                 StringBuilder capitalizedName = new StringBuilder();
                 for (String word : words) {
@@ -76,11 +72,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 userName = capitalizedName.toString().trim();
             } else {
-                userName = "User"; // Default fallback
+                userName = "User";
             }
         }
 
-        // ✅ Set welcome text and profile info
+        // Set welcome text and profile info
         welcomeText.setText("Hello, " + userName + " !");
         profileName.setText(userName);
 
@@ -114,32 +110,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Category clicks
+        // ===================================================
+        // UPDATED: Category clicks - Navigate to Products
+        // ===================================================
+
         groceriesCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Groceries clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ProductsActivity.class);
+                intent.putExtra("CATEGORY", "Groceries");
+                startActivity(intent);
             }
         });
 
         householdCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Household clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ProductsActivity.class);
+                intent.putExtra("CATEGORY", "Household");
+                startActivity(intent);
             }
         });
 
         personalCareCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Personal Care clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ProductsActivity.class);
+                intent.putExtra("CATEGORY", "Personal Care");
+                startActivity(intent);
             }
         });
 
         stationeryCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Stationery clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, ProductsActivity.class);
+                intent.putExtra("CATEGORY", "Stationary");
+                startActivity(intent);
             }
         });
 
@@ -147,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         navHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Already on home
                 Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
             }
         });
@@ -158,10 +166,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // UPDATED: Cart navigation
         navCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Cart", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this, CartActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -1,8 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Lanka Smart Mart</string>
+
+    <!-- App -->
+    <string name="app_name">LankaSmartMart</string>
+
+    <!-- Onboarding -->
     <string name="welcome">Welcome</string>
     <string name="tagline">Providing you the best grocery shopping experience</string>
     <string name="get_started">Get Started</string>
+
+    <!-- Login -->
     <string name="welcome_back">Welcome Back!</string>
     <string name="sign_in_continue">Sign in to continue</string>
     <string name="email_phone">Email or phone number</string>
@@ -13,20 +20,47 @@
     <string name="sign_in_google">Sign in with Google</string>
     <string name="no_account">Don\'t have an account?</string>
     <string name="sign_up">Sign Up</string>
+    <string name="already_account">Already have an account?</string>
+    <string name="log_in">Log in</string>
+
+    <!-- Sign Up -->
     <string name="create_account">Create Account</string>
     <string name="sign_up_started">Sign up to get started</string>
     <string name="full_name">Full Name</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="agree_terms">I agree to Terms &amp; Conditions</string>
     <string name="create_account_btn">Create Account</string>
-    <string name="already_account">Already have an account?</string>
-    <string name="log_in">Log in</string>
+
+    <!-- Home -->
     <string name="hello_user">Hello, Kasun !</string>
-    <string name="search_products">Search for products...</string>
+    <string name="search_products">Search for products…</string>
     <string name="new_year_special">New Year Special !</string>
     <string name="shop_category">Shop by Category</string>
+
+    <!-- Categories -->
     <string name="groceries">Groceries</string>
     <string name="medicine">Medicine</string>
     <string name="personal_care">Personal Care</string>
     <string name="stationary">Stationary</string>
+
+    <!-- Profile -->
+    <string name="user_not_logged_in">User not logged in</string>
+    <string name="not_provided">Not provided</string>
+    <string name="default_location">Colombo 03</string>
+    <string name="no_home_address">No home address saved</string>
+    <string name="no_office_address">No office address saved</string>
+    <string name="edit_profile_picture">Edit profile picture</string>
+    <string name="edit_home_address">Edit home address</string>
+    <string name="edit_office_address">Edit office address</string>
+    <string name="already_on_profile">Already on Profile</string>
+
+    <!-- Bottom Navigation -->
+    <string name="home">Home</string>
+    <string name="categories">Categories</string>
+    <string name="cart">Cart</string>
+    <string name="profile">Profile</string>
+
+    <!-- Common -->
+    <string name="welcome_back_short">Welcome Back</string>
+
 </resources>

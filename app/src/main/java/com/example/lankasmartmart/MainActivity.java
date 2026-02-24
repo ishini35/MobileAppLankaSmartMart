@@ -110,14 +110,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // ===================================================
-        // UPDATED: Category clicks - Navigate to Products
-        // ===================================================
+        // Category clicks - Navigate to Products
 
         groceriesCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProductsActivity.class);
+                Intent intent = new Intent(MainActivity.this, ProductActivity.class);
                 intent.putExtra("CATEGORY", "Groceries");
                 startActivity(intent);
             }
@@ -126,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
         householdCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProductsActivity.class);
+                Intent intent = new Intent(MainActivity.this, ProductActivity.class);
                 intent.putExtra("CATEGORY", "Household");
                 startActivity(intent);
             }
@@ -135,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         personalCareCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProductsActivity.class);
+                Intent intent = new Intent(MainActivity.this, ProductActivity.class);
                 intent.putExtra("CATEGORY", "Personal Care");
                 startActivity(intent);
             }
@@ -144,29 +142,30 @@ public class MainActivity extends AppCompatActivity {
         stationeryCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProductsActivity.class);
-                intent.putExtra("CATEGORY", "Stationary");
+                Intent intent = new Intent(MainActivity.this, ProductActivity.class);
+                intent.putExtra("CATEGORY", "Stationery");
                 startActivity(intent);
             }
         });
 
-        // Bottom navigation
+        // Bottom Navigation
+
         navHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Already on home
-                Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Already on Home", Toast.LENGTH_SHORT).show();
             }
         });
 
         navCategories.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO: Create CategoriesActivity
                 Toast.makeText(MainActivity.this, "Categories", Toast.LENGTH_SHORT).show();
             }
         });
 
-        // UPDATED: Cart navigation
         navCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,27 +177,13 @@ public class MainActivity extends AppCompatActivity {
         navProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                profileOverlay.setVisibility(View.VISIBLE);
-            }
-        });
-
-        navProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(intent);
             }
         });
 
-        navProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProductListActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
+        // Profile Menu Items
 
-        // Profile menu items
         menuNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

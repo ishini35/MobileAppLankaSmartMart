@@ -200,12 +200,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        menuBarcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Barcode Scanner", Toast.LENGTH_SHORT).show();
-                profileOverlay.setVisibility(View.GONE);
-            }
+        menuBarcode.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, BarcodeScannerActivity.class));
+            profileOverlay.setVisibility(View.GONE);
         });
 
         menuOrderHistory.setOnClickListener(new View.OnClickListener() {

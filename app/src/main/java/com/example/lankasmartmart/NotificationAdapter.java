@@ -1,6 +1,7 @@
 package com.example.lankasmartmart;
 
 import android.content.Context;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,74 +11,54 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
+public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder> {
 
     private Context context;
-    private List<NotificationModel> notifications;
+    private List<Notification> notificationList;
 
-    public NotificationAdapter(Context context, List<NotificationModel> notifications) {
+    public NotificationAdapter(Context context, List<Notification> notificationList) {
         this.context = context;
-        this.notifications = notifications;
+        this.notificationList = notificationList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_notification, parent, false);
-        return new ViewHolder(view);
+        return new NotificationViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        NotificationModel notification = notifications.get(position);
+    public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position) {
+        Notification notification = notificationList.get(position);
 
-        holder.title.setText(notification.getTitle());
-        holder.message.setText(notification.getMessage());
-        holder.time.setText(notification.getTime());
-        holder.icon.setImageResource(notification.getIconResId());
+        holder.tvTitle.setText(notification.getTitle());
+        holder.tvMessage.setText(notification.getMessage());
+        holder.tvTime.setText(notification.getTime());
+        holder.ivIcon.setImageResource(notification.getIconResource());
 
-        // Show/hide unread dot
-        holder.unreadDot.setVisibility(notification.isRead() ? View.INVISIBLE : View.VISIBLE);
-
-        // Change background for unread notifications
-        if (!notification.isRead()) {
-            holder.itemView.setBackgroundResource(R.drawable.notification_item_unread_bg);
-        } else {
-            holder.itemView.setBackgroundResource(R.drawable.notification_item_bg);
-        }
-
-        // Mark as read on click
-        holder.itemView.setOnClickListener(v -> {
-            notification.setRead(true);
-            notifyItemChanged(position);
-        });
+        // Set colored circle background
+        GradientDrawable drawable = (GradientDrawable) holder.iconBackground.getBackground();
+        drawable.setColor(notification.getIconBackgroundColor());
     }
 
     @Override
     public int getItemCount() {
-        return notifications.size();
+        return notificationList.size();
     }
 
-    // Mark all as read
-    public void markAllAsRead() {
-        for (NotificationModel n : notifications) {
-            n.setRead(true);
-        }
-        notifyDataSetChanged();
-    }
+    public static class NotificationViewHolder extends RecyclerView.ViewHolder {
+        TextView tvTitle, tvMessage, tvTime;
+        ImageView ivIcon;
+        View iconBackground;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView icon;
-        TextView title, message, time;
-        View unreadDot;
-
-        public ViewHolder(@NonNull View itemView) {
+        public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
-            icon = itemView.findViewById(R.id.notificationIcon);
-            title = itemView.findViewById(R.id.notificationTitle);
-            message = itemView.findViewById(R.id.notificationMessage);
-            time = itemView.findViewById(R.id.notificationTime);
-            unreadDot = itemView.findViewById(R.id.unreadDot);
+            tvTitle = itemView.findViewById(R.id.tvNotificationTitle);
+            tvMessage = itemView.findViewById(R.id.tvNotificationMessage);
+            tvTime = itemView.findViewById(R.id.tvNotificationTime);
+            ivIcon = itemView.findViewById(R.id.ivNotificationIcon);
+            iconBackground = itemView.findViewById(R.id.iconBackground);
         }
     }
 }

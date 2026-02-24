@@ -75,6 +75,15 @@ public class MainActivity extends AppCompatActivity {
                 userName = "User";
             }
         }
+        // In MainActivity.java, find menuNotifications click listener
+        menuNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NotificationsActivity.class);
+                startActivity(intent);
+                profileOverlay.setVisibility(View.GONE);
+            }
+        });
 
         // Set welcome text and profile info
         welcomeText.setText("Hello, " + userName + " !");
@@ -211,6 +220,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Order History", Toast.LENGTH_SHORT).show();
                 profileOverlay.setVisibility(View.GONE);
             }
+
+
+
         });
     }
 }

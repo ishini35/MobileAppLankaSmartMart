@@ -1,10 +1,11 @@
 package com.example.lankasmartmart;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,101 +14,105 @@ import java.util.List;
 
 public class NotificationsActivity extends AppCompatActivity {
 
-    RecyclerView recyclerNotifications;
-    LinearLayout emptyState;
-    TextView btnMarkAllRead;
-    View btnBack;
-    LinearLayout navHome, navCategories, navCart, navProfile;
-
-    NotificationAdapter adapter;
-    List<NotificationModel> notificationList;
+    private RecyclerView recyclerNotifications;
+    private NotificationAdapter notificationAdapter;
+    private List<Notification> notificationList;
+    private ImageButton btnBack;
+    private LinearLayout navHome, navCategories, navCart, navProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notifications);
 
-        // Init views
+        // Initialize views
         recyclerNotifications = findViewById(R.id.recyclerNotifications);
-        emptyState = findViewById(R.id.emptyState);
-        btnMarkAllRead = findViewById(R.id.btnMarkAllRead);
         btnBack = findViewById(R.id.btnBack);
         navHome = findViewById(R.id.navHome);
         navCategories = findViewById(R.id.navCategories);
         navCart = findViewById(R.id.navCart);
         navProfile = findViewById(R.id.navProfile);
 
+        // Setup RecyclerView
+        recyclerNotifications.setLayoutManager(new LinearLayoutManager(this));
+
         // Load notifications
         loadNotifications();
 
-        // Setup RecyclerView
-        adapter = new NotificationAdapter(this, notificationList);
-        recyclerNotifications.setLayoutManager(new LinearLayoutManager(this));
-        recyclerNotifications.setAdapter(adapter);
-
-        // Show empty state if no notifications
-        if (notificationList.isEmpty()) {
-            recyclerNotifications.setVisibility(View.GONE);
-            emptyState.setVisibility(View.VISIBLE);
-        }
+        // Setup adapter
+        notificationAdapter = new NotificationAdapter(this, notificationList);
+        recyclerNotifications.setAdapter(notificationAdapter);
 
         // Back button
-        btnBack.setOnClickListener(v -> finish());
-
-        // Mark all as read
-        btnMarkAllRead.setOnClickListener(v -> {
-            adapter.markAllAsRead();
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
         });
 
-        // Bottom Navigation
-        navHome.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+        // Bottom navigation
+        navHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NotificationsActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
         });
 
-        navCategories.setOnClickListener(v -> {
-            // Navigate to categories
+        navCategories.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to categories
+            }
         });
 
-        navCart.setOnClickListener(v -> {
-            startActivity(new Intent(this, CartActivity.class));
+        navCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NotificationsActivity.this, CartActivity.class);
+                startActivity(intent);
+            }
         });
 
-        navProfile.setOnClickListener(v -> {
-            startActivity(new Intent(this, ProfileActivity.class));
+        navProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to profile
+            }
         });
     }
 
     private void loadNotifications() {
         notificationList = new ArrayList<>();
 
-        // Sample notifications matching the Figma design
-        notificationList.add(new NotificationModel(
+        // Add sample notifications with EXACT colors from your design
+        notificationList.add(new Notification(
+                1,
                 "Weekend Special !",
                 "20% off on personal care products",
                 "5 min ago",
-                R.drawable.ic_notifications,
-                false,
-                "promo"
+                R.drawable.ic_discount,
+                Color.parseColor("#3D9970")  // Green
         ));
 
-        notificationList.add(new NotificationModel(
+        notificationList.add(new Notification(
+                2,
                 "Order Delivered",
                 "Your order #LSM2024 has been delivered",
                 "1 hour ago",
-                R.drawable.ic_shopping_cart,
-                false,
-                "order"
+                R.drawable.ic_delivery,
+                Color.parseColor("#FF9800")  // Orange
         ));
 
-        notificationList.add(new NotificationModel(
+        notificationList.add(new Notification(
+                3,
                 "Flash Sale Alert",
                 "Chocolate Bars Flying Off the Shelves",
                 "Yesterday",
-                R.drawable.ic_notifications,
-                true,
-                "flash_sale"
+                R.drawable.ic_flash_sale,
+                Color.parseColor("#E91E63")  // Pink/Red
         ));
     }
 }

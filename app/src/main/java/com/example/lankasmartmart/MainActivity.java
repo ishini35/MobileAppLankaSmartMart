@@ -172,6 +172,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        navProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        navProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProductListActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Profile menu items
         menuNotifications.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -21,7 +21,8 @@
             android:layout_height="120dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_shopping_cart"
-            android:background="#F5F5F5"/>
+            android:background="#F5F5F5"
+            android:contentDescription="Product image"/>
 
         <!-- Out of Stock Overlay -->
         <TextView
@@ -29,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Out of Stock"
-            android:textColor="#FF0000"
+            android:textColor="#B71C1C"
             android:textSize="12sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -60,15 +61,17 @@
             android:textStyle="bold"
             android:layout_marginTop="4dp"/>
 
-        <!-- Add to Cart Button -->
+        <!-- Add to Cart Button: 48dp height, wrap_content width, darker text -->
         <Button
             android:id="@+id/btnAddToCart"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:text="Add to cart"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:text="Add to Cart"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#3D9970"
+            android:backgroundTint="#2E7D53"
             android:textSize="12sp"
+            android:textAllCaps="false"
             android:layout_marginTop="8dp"/>
 
     </LinearLayout>

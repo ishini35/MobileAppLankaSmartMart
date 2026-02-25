@@ -1,40 +1,218 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#F5F5F5">
-    <!--  Top Bar  -->
-    <RelativeLayout android:id="@+id/topBar" android:layout_width="match_parent" android:layout_height="56dp" android:paddingStart="16dp" android:paddingEnd="16dp" android:background="#FFFFFF" android:elevation="4dp">
-        <ImageView android:id="@+id/backBtn" android:layout_width="32dp" android:layout_height="32dp" android:layout_centerVertical="true" android:src="@drawable/ic_back" android:background="?attr/selectableItemBackgroundBorderless" android:clickable="true" android:focusable="true" app:tint="#212121"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:text="My Cart" android:textColor="#212121" android:textSize="18sp" android:textStyle="bold"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <!-- Top Bar -->
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:background="#FFFFFF"
+        android:elevation="4dp">
+
+        <ImageView
+            android:id="@+id/backBtn"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="8dp"
+            android:contentDescription="@string/back"
+            app:tint="#212121" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/my_cart"
+            android:textColor="#212121"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
     </RelativeLayout>
-    <!--  Empty Cart State  -->
-    <LinearLayout android:id="@+id/emptyCartLayout" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_below="@id/topBar" android:orientation="vertical" android:gravity="center" android:visibility="gone">
-        <ImageView android:layout_width="100dp" android:layout_height="100dp" android:src="@drawable/ic_cart" app:tint="#CCCCCC" android:layout_marginBottom="16dp"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Your cart is empty" android:textColor="#757575" android:textSize="18sp" android:textStyle="bold"/>
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Add items to start shopping" android:textColor="#9E9E9E" android:textSize="14sp" android:layout_marginTop="8dp"/>
+
+    <!-- Empty Cart State -->
+    <LinearLayout
+        android:id="@+id/emptyCartLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_cart"
+            android:contentDescription="@string/empty_cart"
+            app:tint="#CCCCCC"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cart_empty_title"
+            android:textColor="#757575"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cart_empty_subtitle"
+            android:textColor="#9E9E9E"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
     </LinearLayout>
-    <!--  Cart Content  -->
-    <RelativeLayout android:id="@+id/cartContentLayout" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_below="@id/topBar">
-        <!--  Cart Items RecyclerView  -->
-        <androidx.recyclerview.widget.RecyclerView android:id="@+id/cartRecyclerView" android:layout_width="match_parent" android:layout_height="match_parent" android:layout_above="@id/orderSummaryCard" android:paddingStart="12dp" android:paddingEnd="12dp" android:paddingTop="12dp" android:clipToPadding="false"/>
-        <!--  Order Summary  -->
-        <LinearLayout android:id="@+id/orderSummaryCard" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:background="@drawable/card_background" android:orientation="vertical" android:padding="20dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Order Summary" android:textColor="#212121" android:textSize="16sp" android:textStyle="bold" android:layout_marginBottom="16dp"/>
-            <!--  Subtotal Row  -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="10dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Subtotal" android:textColor="#757575" android:textSize="14sp"/>
-                <TextView android:id="@+id/subtotalText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LKR 0.00" android:textColor="#212121" android:textSize="14sp" android:textStyle="bold"/>
+
+    <!-- Cart Content -->
+    <RelativeLayout
+        android:id="@+id/cartContentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar">
+
+        <!-- Cart Items RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/cartRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/orderSummaryCard"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingTop="12dp"
+            android:clipToPadding="false" />
+
+        <!-- Order Summary -->
+        <LinearLayout
+            android:id="@+id/orderSummaryCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/category_card_background"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/order_summary"
+                android:textColor="#212121"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Subtotal Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/subtotal"
+                    android:textColor="#757575"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/subtotalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_price"
+                    android:textColor="#212121"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
-            <!--  Delivery Row  -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="12dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Delivery Fee" android:textColor="#757575" android:textSize="14sp"/>
-                <TextView android:id="@+id/deliveryFeeText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LKR 200.00" android:textColor="#212121" android:textSize="14sp" android:textStyle="bold"/>
+
+            <!-- Delivery Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/delivery_fee"
+                    android:textColor="#757575"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/deliveryFeeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_delivery_fee"
+                    android:textColor="#212121"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0" android:layout_marginBottom="12dp"/>
-            <!--  Total Row  -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="16dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Total" android:textColor="#212121" android:textSize="16sp" android:textStyle="bold"/>
-                <TextView android:id="@+id/totalText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="LKR 0.00" android:textColor="#31835D" android:textSize="16sp" android:textStyle="bold"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Total Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/total"
+                    android:textColor="#212121"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/totalText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/default_price"
+                    android:textColor="#31835D"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
-            <!--  Checkout Button  -->
-            <Button android:id="@+id/checkoutBtn" android:layout_width="match_parent" android:layout_height="52dp" android:text="Proceed to Checkout" android:textColor="#FFFFFF" android:textSize="16sp" android:textStyle="bold" android:background="@drawable/btn_primary" android:textAllCaps="false"/>
+
+            <!-- Checkout Button -->
+            <Button
+                android:id="@+id/checkoutBtn"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="@string/proceed_checkout"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:background="@drawable/btn_primary"
+                android:textAllCaps="false" />
+
         </LinearLayout>
+
     </RelativeLayout>
+
 </RelativeLayout>

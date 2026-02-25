@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Tag/discount shape -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M21.41,11.58L12.41,2.58C12.04,2.21 11.53,2 11,2H4C2.9,2 2,2.9 2,4V11C2,11.53 2.21,12.04 2.59,12.41L11.59,21.41C11.97,21.79 12.47,22 13,22C13.53,22 14.03,21.79 14.41,21.41L21.41,14.41C21.79,14.03 22,13.53 22,13C22,12.47 21.79,11.96 21.41,11.58Z"/>
+    <!-- Percentage symbol -->
+    <path
+        android:fillColor="#3D9970"
+        android:pathData="M7,7m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"/>
+    <path
+        android:fillColor="#3D9970"
+        android:pathData="M15,15m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0"/>
+    <path
+        android:strokeColor="#3D9970"
+        android:strokeWidth="1.5"
+        android:pathData="M8,16L16,8"
+        android:fillColor="#00000000"/>
+</vector>

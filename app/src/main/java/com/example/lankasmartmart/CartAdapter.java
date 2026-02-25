@@ -9,24 +9,27 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+import java.util.Locale;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
+
+    private final Context context;
+    private final List<CartItem> cartItems;
+    private final CartUpdateListener listener;
+    private final DatabaseHelper databaseHelper;
+    private final int userId;
 
     public interface CartUpdateListener {
         void onCartUpdated();
     }
 
-    private Context context;
-    private List<CartItem> cartItems;
-    private CartUpdateListener listener;
-    private DatabaseHelper dbHelper;
-
-    public CartAdapter(Context context, List<CartItem> cartItems,
-                       CartUpdateListener listener, DatabaseHelper dbHelper) {
+    public CartAdapter(Context context, List<CartItem> cartItems, CartUpdateListener listener,
+                       DatabaseHelper databaseHelper, int userId) {
         this.context = context;
         this.cartItems = cartItems;
         this.listener = listener;
-        this.dbHelper = dbHelper;
+        this.databaseHelper = databaseHelper;
+        this.userId = userId;
     }
 
     @NonNull
@@ -41,50 +44,53 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         CartItem item = cartItems.get(position);
 
         holder.productName.setText(item.getProductName());
-        holder.productBrand.setText(item.getProductBrand());
-        holder.productPrice.setText("LKR " + String.format("%.2f", item.getProductPrice()));
-        holder.quantityText.setText(String.valueOf(item.getQuantity()));
-        holder.subtotalText.setText("LKR " + String.format("%.2f", item.getSubtotal()));
+        holder.productPrice.setText(String.format(Locale.getDefault(), "LKR %.2f", item.getPrice()));
+        holder.quantity.setText(String.valueOf(item.getQuantity()));
+        holder.totalPrice.setText(String.format(Locale.getDefault(), "LKR %.2f", item.getPrice() * item.getQuantity()));
 
-        // Decrease quantity
-        holder.decreaseBtn.setOnClickListener(v -> {
-            int newQty = item.getQuantity() - 1;
-            dbHelper.updateCartQuantity(item.getId(), newQty);
-            listener.onCartUpdated();
+        // Plus button
+        holder.btnPlus.setOnClickListener(v -> {
+            int newQuantity = item.getQuantity() + 1;
+            databaseHelper.updateCartQuantity(userId, item.getProductId(), newQuantity);
+            if (listener != null) listener.onCartUpdated();
         });
 
-        // Increase quantity
-        holder.increaseBtn.setOnClickListener(v -> {
-            int newQty = item.getQuantity() + 1;
-            dbHelper.updateCartQuantity(item.getId(), newQty);
-            listener.onCartUpdated();
+        // Minus button
+        holder.btnMinus.setOnClickListener(v -> {
+            int newQuantity = Math.max(item.getQuantity() - 1, 0);
+            if (newQuantity > 0) {
+                databaseHelper.updateCartQuantity(userId, item.getProductId(), newQuantity);
+            } else {
+                databaseHelper.updateCartQuantity(userId, item.getProductId(), 0);
+            }
+            if (listener != null) listener.onCartUpdated();
         });
 
-        // Delete item
-        holder.deleteBtn.setOnClickListener(v -> {
-            dbHelper.removeFromCart(item.getId());
-            listener.onCartUpdated();
+        // Delete button
+        holder.btnDelete.setOnClickListener(v -> {
+            databaseHelper.updateCartQuantity(userId, item.getProductId(), 0);
+            if (listener != null) listener.onCartUpdated();
         });
     }
 
     @Override
-    public int getItemCount() { return cartItems.size(); }
+    public int getItemCount() {
+        return cartItems.size();
+    }
 
-    static class CartViewHolder extends RecyclerView.ViewHolder {
-        TextView productName, productBrand, productPrice, quantityText, subtotalText;
-        View decreaseBtn, increaseBtn, deleteBtn;
+    public static class CartViewHolder extends RecyclerView.ViewHolder {
+        TextView productName, productPrice, quantity, totalPrice;
+        ImageView btnPlus, btnMinus, btnDelete;
 
-        CartViewHolder(@NonNull View itemView) {
+        public CartViewHolder(@NonNull View itemView) {
             super(itemView);
-            productName  = itemView.findViewById(R.id.cartProductName);
-            productBrand = itemView.findViewById(R.id.cartProductBrand);
-            productPrice = itemView.findViewById(R.id.cartProductPrice);
-            quantityText = itemView.findViewById(R.id.quantityText);
-            subtotalText = itemView.findViewById(R.id.cartSubtotal);
-            decreaseBtn  = itemView.findViewById(R.id.decreaseBtn);
-            increaseBtn  = itemView.findViewById(R.id.increaseBtn);
-            deleteBtn    = itemView.findViewById(R.id.deleteBtn);
+            productName = itemView.findViewById(R.id.productName);
+            productPrice = itemView.findViewById(R.id.productPrice);
+            quantity = itemView.findViewById(R.id.quantity);
+            totalPrice = itemView.findViewById(R.id.totalPrice);
+            btnPlus = itemView.findViewById(R.id.btnPlus);
+            btnMinus = itemView.findViewById(R.id.btnMinus);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
 }
-

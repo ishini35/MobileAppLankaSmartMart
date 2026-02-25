@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -71,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CART_QUANTITY = "quantity";
 
     // Constructor
-    public DatabaseHelper(Context context) {
+    public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -223,7 +224,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Insert sample addresses
     private void insertSampleAddresses(SQLiteDatabase db) {
-        // Sample addresses for testing (user_id 1)
         ContentValues homeAddress = new ContentValues();
         homeAddress.put(ADDRESS_USER_ID, 1);
         homeAddress.put(ADDRESS_TYPE, "Home");
@@ -239,11 +239,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_ADDRESSES, null, officeAddress);
     }
 
-    // =============================================
     // USER OPERATIONS
-    // =============================================
 
-    // Register new user
     public boolean addUser(String name, String email, String password, String phone) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -258,10 +255,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    // Check login
     public boolean checkUser(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor cursor = db.rawQuery(
                 "SELECT * FROM " + TABLE_USERS
                         + " WHERE " + USER_EMAIL + " = ? AND "
@@ -275,10 +270,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    // Check email already exists
     public boolean checkEmailExists(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
-
         Cursor cursor = db.rawQuery(
                 "SELECT * FROM " + TABLE_USERS
                         + " WHERE " + USER_EMAIL + " = ?",
@@ -291,7 +284,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-    // Get user by email
     public Cursor getUserByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
@@ -301,7 +293,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
-    // Get user ID by email
     public int getUserId(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         int userId = -1;
@@ -313,7 +304,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
 
         if (cursor.moveToFirst()) {
-            userId = cursor.getInt(0);
+            int columnIndex = cursor.getColumnIndex(USER_ID);
+            if (columnIndex != -1) {
+                userId = cursor.getInt(columnIndex);
+            }
         }
         cursor.close();
         db.close();
@@ -321,53 +315,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userId;
     }
 
-    // Get ALL users
-    public Cursor getAllUsers() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_USERS, null);
-    }
-
-    // Update user phone
-    public boolean updateUserPhone(int userId, String phone) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(USER_PHONE, phone);
-
-        int rows = db.update(TABLE_USERS, values, USER_ID + "=?",
-                new String[]{String.valueOf(userId)});
-        db.close();
-        return rows > 0;
-    }
-
-    // =============================================
     // PRODUCT OPERATIONS
-    // =============================================
 
-    // Add product
-    public boolean addProduct(String name, double price, String category,
-                              String description, String image, int stock) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-
-        values.put(PRODUCT_NAME, name);
-        values.put(PRODUCT_PRICE, price);
-        values.put(PRODUCT_CATEGORY, category);
-        values.put(PRODUCT_DESCRIPTION, description);
-        values.put(PRODUCT_IMAGE, image);
-        values.put(PRODUCT_STOCK, stock);
-
-        long result = db.insert(TABLE_PRODUCTS, null, values);
-        db.close();
-        return result != -1;
-    }
-
-    // Get all products
     public Cursor getAllProducts() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_PRODUCTS, null);
     }
 
-    // Get products by category
     public Cursor getProductsByCategory(String category) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
@@ -377,7 +331,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
-    // Get product by ID
     public Cursor getProductById(int productId) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
@@ -387,15 +340,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
-    // =============================================
-    // CART OPERATIONS
-    // =============================================
+    //  CART OPERATIONS
 
-    // Add item to cart
     public long addToCart(int userId, int productId, int quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        // Check if item already in cart
         Cursor cursor = db.rawQuery(
                 "SELECT * FROM " + TABLE_CART
                         + " WHERE " + CART_USER_ID + " = ? AND "
@@ -403,39 +352,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(userId), String.valueOf(productId)}
         );
 
-        if (cursor.getCount() > 0) {
-            // Update quantity
-            cursor.moveToFirst();
-            int currentQty = cursor.getInt(cursor.getColumnIndex(CART_QUANTITY));
-            int newQty = currentQty + quantity;
+        long result;
+        if (cursor.getCount() > 0 && cursor.moveToFirst()) {
+            // FIXED: Check if column exists before getting value
+            int quantityIndex = cursor.getColumnIndex(CART_QUANTITY);
+            if (quantityIndex != -1) {
+                int currentQty = cursor.getInt(quantityIndex);
+                int newQty = currentQty + quantity;
 
-            ContentValues values = new ContentValues();
-            values.put(CART_QUANTITY, newQty);
+                ContentValues values = new ContentValues();
+                values.put(CART_QUANTITY, newQty);
 
-            long result = db.update(TABLE_CART, values,
-                    CART_USER_ID + "=? AND " + CART_PRODUCT_ID + "=?",
-                    new String[]{String.valueOf(userId), String.valueOf(productId)});
-            cursor.close();
-            db.close();
-            return result;
+                result = db.update(TABLE_CART, values,
+                        CART_USER_ID + "=? AND " + CART_PRODUCT_ID + "=?",
+                        new String[]{String.valueOf(userId), String.valueOf(productId)});
+            } else {
+                result = -1;
+            }
         } else {
-            // Insert new item
             ContentValues values = new ContentValues();
             values.put(CART_USER_ID, userId);
             values.put(CART_PRODUCT_ID, productId);
             values.put(CART_QUANTITY, quantity);
 
-            long result = db.insert(TABLE_CART, null, values);
-            cursor.close();
-            db.close();
-            return result;
+            result = db.insert(TABLE_CART, null, values);
         }
+        cursor.close();
+        db.close();
+        return result;
     }
 
-    // Get cart items for user
     public Cursor getCartItems(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT c.*, p." + PRODUCT_NAME + " as product_name, "
+        String query = "SELECT c.*, "
+                + "c." + CART_PRODUCT_ID + " as " + CART_PRODUCT_ID + ", "
+                + "p." + PRODUCT_NAME + " as product_name, "
                 + "p." + PRODUCT_PRICE + " as product_price, "
                 + "p." + PRODUCT_IMAGE + " as product_image "
                 + "FROM " + TABLE_CART + " c "
@@ -445,7 +396,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{String.valueOf(userId)});
     }
 
-    // Get cart item count
     public int getCartItemCount(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
@@ -463,12 +413,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return count;
     }
 
-    // Update cart quantity
     public boolean updateCartQuantity(int userId, int productId, int quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         if (quantity <= 0) {
-            // Remove from cart
             int rows = db.delete(TABLE_CART,
                     CART_USER_ID + "=? AND " + CART_PRODUCT_ID + "=?",
                     new String[]{String.valueOf(userId), String.valueOf(productId)});
@@ -486,7 +434,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    // Clear cart
     public boolean clearCart(int userId) {
         SQLiteDatabase db = this.getWritableDatabase();
         int rows = db.delete(TABLE_CART, CART_USER_ID + "=?",
@@ -495,11 +442,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rows > 0;
     }
 
-    // =============================================
     // ORDER OPERATIONS
-    // =============================================
 
-    // Create new order
     public long addOrder(int userId, double totalPrice) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -513,7 +457,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return orderId;
     }
 
-    // Add item to order
     public boolean addOrderItem(int orderId, int productId, int quantity, double price) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -528,7 +471,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    // Get all orders for a user
     public Cursor getUserOrders(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
@@ -539,7 +481,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
-    // Get order items
     public Cursor getOrderItems(int orderId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT oi.*, p." + PRODUCT_NAME + " as product_name "
@@ -550,11 +491,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, new String[]{String.valueOf(orderId)});
     }
 
-    // =============================================
     // ADDRESS OPERATIONS
-    // =============================================
 
-    // Add address
     public long addAddress(int userId, String type, String addressLine, String city) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -569,7 +507,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    // Get user addresses
     public Cursor getUserAddresses(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
@@ -579,7 +516,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
     }
 
-    // Update address
     public boolean updateAddress(int addressId, String type, String addressLine, String city) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -594,7 +530,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rows > 0;
     }
 
-    // Delete address
     public boolean deleteAddress(int addressId) {
         SQLiteDatabase db = this.getWritableDatabase();
         int rows = db.delete(TABLE_ADDRESSES, ADDRESS_ID + "=?",
@@ -603,17 +538,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rows > 0;
     }
 
-    // =============================================
     // CATEGORIES OPERATIONS
-    // =============================================
 
-    // Get all categories
     public Cursor getAllCategories() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery("SELECT * FROM " + TABLE_CATEGORIES, null);
     }
 
-    // Get category by ID
     public Cursor getCategoryById(int categoryId) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(

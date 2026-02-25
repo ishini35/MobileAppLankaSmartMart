@@ -18,7 +18,7 @@
     <string name="login">Login</string>
     <string name="or">OR</string>
     <string name="sign_in_google">Sign in with Google</string>
-    <string name="no_account">Don\'t have an account?</string>
+    <string name="no_account">Don\'t have an account? </string>
     <string name="sign_up">Sign Up</string>
     <string name="already_account">Already have an account?</string>
     <string name="log_in">Log in</string>
@@ -62,5 +62,52 @@
 
     <!-- Common -->
     <string name="welcome_back_short">Welcome Back</string>
+    <string name="back">Back</string>
+    <string name="edit">Edit</string>
+    <string name="selected">Selected</string>
+    <string name="not_selected">Not selected</string>
+
+    <!-- Notifications -->
+    <string name="notifications">Notifications</string>
+    <string name="no_notifications">No notifications yet</string>
+
+    <!-- Cart -->
+    <string name="my_cart">My Cart</string>
+    <string name="empty_cart">Empty cart</string>
+    <string name="cart_empty_title">Your cart is empty</string>
+    <string name="cart_empty_subtitle">Add items to start shopping</string>
+    <string name="order_summary">Order Summary</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="delivery_fee">Delivery Fee</string>
+    <string name="total">Total</string>
+    <string name="default_price">LKR 0.00</string>
+    <string name="default_delivery_fee">LKR 200.00</string>
+    <string name="proceed_checkout">Proceed to Checkout</string>
+
+    <!-- Checkout -->
+    <string name="checkout">Checkout</string>
+    <string name="delivery_address">Delivery Address</string>
+    <string name="delivery_time">Delivery Time</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="cod">Cash on Delivery (COD)</string>
+    <string name="card_payment">Card Payment</string>
+    <string name="online_banking">Online Banking</string>
+    <string name="items">Items</string>
+    <string name="discount">Discount</string>
+    <string name="place_order">Place Order</string>
+    <string name="default_address">123, Galle Road, Colombo 03</string>
+    <string name="default_delivery_time">Tomorrow, 2-4 PM</string>
+    <string name="default_items_count">3 items</string>
+    <string name="default_discount">-LKR 0.00</string>
+
+    <!-- Barcode Scanner -->
+    <string name="barcode_scanner">Barcode Scanner</string>
+    <string name="align_barcode">Align Barcode Within the Frame</string>
+    <string name="camera">Camera</string>
+    <string name="camera_view">Camera View</string>
+    <string name="scanner_frame">Scanner frame</string>
+    <string name="scanning_status">Scanning for Products...</string>
+    <string name="manual_entry">Manual Entry</string>
+    <string name="help">Help</string>
 
 </resources>

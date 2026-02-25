@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Lightning bolt / flash icon -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M7,2V13H10V22L17,11H13L17,2H7Z"/>
+    <!-- Inner accent -->
+    <path
+        android:fillColor="#E91E63"
+        android:pathData="M10,2V9H8.5L11,18L14.5,11H11.5L15,2H10Z"/>
+</vector>

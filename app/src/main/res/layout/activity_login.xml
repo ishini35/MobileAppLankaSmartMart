@@ -17,11 +17,10 @@
             android:id="@+id/appTitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lanka Smart Mart"
+            android:text="@string/app_name"
             android:textColor="#3D9970"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:fontFamily="poppins"
             android:layout_marginTop="60dp"
             android:layout_marginBottom="20dp"/>
 
@@ -29,21 +28,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome Back!"
+            android:text="@string/welcome_back"
             android:textColor="#000000"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:fontFamily="poppins"
             android:layout_marginBottom="8dp"/>
 
         <!-- Sign in to continue -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign in to continue"
+            android:text="@string/sign_in_continue"
             android:textColor="#646464"
             android:textSize="16sp"
-            android:fontFamily="inter"
             android:layout_marginBottom="40dp"/>
 
         <!-- Email Input -->
@@ -51,15 +48,17 @@
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:hint="Email or phone number"
+            android:hint="@string/email_phone"
             android:inputType="textEmailAddress"
+            android:autofillHints="emailAddress"
             android:textColor="#000000"
             android:textColorHint="#BCBCBC"
             android:background="@drawable/edittext_border"
             android:drawableStart="@drawable/ic_email_small"
             android:drawablePadding="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:textSize="16sp"
-            android:fontFamily="inter"
             android:layout_marginBottom="16dp"/>
 
         <!-- Password Input -->
@@ -67,40 +66,40 @@
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
+            android:autofillHints="password"
             android:textColor="#000000"
             android:textColorHint="#BCBCBC"
             android:background="@drawable/edittext_border"
-            android:drawableStart="@android:drawable/ic_lock_idle_lock"
-            android:drawableEnd="@android:drawable/ic_menu_view"
+            android:drawableStart="@drawable/ic_settings"
             android:drawablePadding="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:textSize="16sp"
-            android:fontFamily="inter"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="8dp"/>
 
         <!-- Forgot Password -->
         <TextView
             android:id="@+id/forgotPasswordText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Forgot Password?"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="@string/forgot_password"
             android:textColor="#3D9970"
             android:textSize="14sp"
-            android:fontFamily="inter"
-            android:layout_gravity="center"
-            android:layout_marginBottom="30dp"
-            android:clickable="true"/>
+            android:gravity="center"
+            android:layout_marginBottom="22dp"
+            android:clickable="true"
+            android:focusable="true"/>
 
         <!-- Login Button -->
         <Button
             android:id="@+id/loginButton"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Login"
+            android:text="@string/login"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            android:fontFamily="inter"
             android:backgroundTint="#3D9970"
             android:layout_marginBottom="20dp"/>
 
@@ -108,48 +107,51 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OR"
+            android:text="@string/or"
             android:textColor="#808080"
             android:textSize="14sp"
-            android:fontFamily="inter"
             android:layout_marginBottom="20dp"/>
 
         <!-- Sign in with Google -->
         <TextView
             android:id="@+id/googleSignInText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign in with Google"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="@string/sign_in_google"
             android:textColor="#000000"
             android:textSize="16sp"
-            android:fontFamily="inter"
+            android:gravity="center"
             android:layout_marginBottom="30dp"
-            android:clickable="true"/>
+            android:clickable="true"
+            android:focusable="true"/>
 
         <!-- Don't have account -->
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Don't have an account? "
+                android:text="@string/no_account"
                 android:textColor="#000000"
-                android:textSize="14sp"
-                android:fontFamily="inter"/>
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/signUpText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sign Up"
+                android:layout_height="match_parent"
+                android:text="@string/sign_up"
                 android:textColor="#3D9970"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:fontFamily="inter"
-                android:clickable="true"/>
+                android:gravity="center_vertical"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:clickable="true"
+                android:focusable="true"/>
         </LinearLayout>
 
     </LinearLayout>

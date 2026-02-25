@@ -10,34 +10,77 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LankaSmartMart">
 
+        <!-- Splash Screen - First screen -->
         <activity
             android:name=".SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
+        <!-- Welcome Screen -->
         <activity
             android:name=".WelcomeActivity"
             android:exported="false" />
 
+        <!-- Login Screen -->
         <activity
             android:name=".LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
 
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ProductActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".OrderConfirmationActivity" />
+        <!-- Register Screen -->
+        <activity
+            android:name=".RegisterActivity"
+            android:exported="false" />
+
+        <!-- Main/Home Screen -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- Products List Screen -->
+        <activity
+            android:name=".ProductsActivity"
+            android:exported="false" />
+
+        <!-- Cart Screen -->
+        <activity
+            android:name=".CartActivity"
+            android:exported="false" />
+
+        <!-- Checkout Screen -->
+        <activity
+            android:name=".CheckoutActivity"
+            android:exported="false" />
+
+        <!-- Order Confirmation Screen -->
+        <activity
+            android:name=".OrderConfirmationActivity"
+            android:exported="false" />
+
+        <!-- Profile Screen -->
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+
+        <!-- Settings Screen -->
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+
+        <!-- Notifications Screen -->
+        <activity
+            android:name=".NotificationsActivity"
+            android:exported="false" />
+
+        <!-- Barcode Scanner Screen -->
+        <activity
+            android:name=".BarcodeScannerActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

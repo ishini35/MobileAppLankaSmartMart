@@ -21,7 +21,7 @@
             android:textColor="#3D9970"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:fontFamily="poppins"
+            android:fontFamily="sans-serif"
             android:layout_marginTop="40dp"
             android:layout_marginBottom="20dp"/>
 
@@ -33,7 +33,7 @@
             android:textColor="#000000"
             android:textSize="26sp"
             android:textStyle="bold"
-            android:fontFamily="poppins"
+            android:fontFamily="sans-serif"
             android:layout_marginBottom="8dp"/>
 
         <!-- Sign up to get started -->
@@ -43,7 +43,7 @@
             android:text="Sign up to get started"
             android:textColor="#808080"
             android:textSize="16sp"
-            android:fontFamily="inter"
+            android:fontFamily="sans-serif"
             android:layout_marginBottom="30dp"/>
 
         <!-- Full Name Input -->
@@ -53,13 +53,16 @@
             android:layout_height="56dp"
             android:hint="Full Name"
             android:inputType="textPersonName"
+            android:autofillHints="name"
             android:textColor="#000000"
             android:textColorHint="#BCBCBC"
             android:background="@drawable/edittext_border"
             android:drawableStart="@drawable/ic_edit_small"
             android:drawablePadding="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:textSize="16sp"
-            android:fontFamily="inter"
+            android:fontFamily="sans-serif"
             android:layout_marginBottom="16dp"/>
 
         <!-- Email Input -->
@@ -69,13 +72,16 @@
             android:layout_height="56dp"
             android:hint="Email or phone number"
             android:inputType="textEmailAddress"
+            android:autofillHints="emailAddress"
             android:textColor="#000000"
             android:textColorHint="#BCBCBC"
             android:background="@drawable/edittext_border"
             android:drawableStart="@drawable/ic_email_small"
             android:drawablePadding="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:textSize="16sp"
-            android:fontFamily="inter"
+            android:fontFamily="sans-serif"
             android:layout_marginBottom="16dp"/>
 
         <!-- Password Input -->
@@ -85,14 +91,17 @@
             android:layout_height="56dp"
             android:hint="Password"
             android:inputType="textPassword"
+            android:autofillHints="newPassword"
             android:textColor="#000000"
             android:textColorHint="#BCBCBC"
             android:background="@drawable/edittext_border"
             android:drawableStart="@android:drawable/ic_lock_idle_lock"
             android:drawableEnd="@android:drawable/ic_menu_view"
             android:drawablePadding="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:textSize="16sp"
-            android:fontFamily="inter"
+            android:fontFamily="sans-serif"
             android:layout_marginBottom="16dp"/>
 
         <!-- Confirm Password Input -->
@@ -102,14 +111,17 @@
             android:layout_height="56dp"
             android:hint="Confirm Password"
             android:inputType="textPassword"
+            android:autofillHints="newPassword"
             android:textColor="#000000"
             android:textColorHint="#BCBCBC"
             android:background="@drawable/edittext_border"
             android:drawableStart="@android:drawable/ic_lock_idle_lock"
             android:drawableEnd="@android:drawable/ic_menu_view"
             android:drawablePadding="12dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:textSize="16sp"
-            android:fontFamily="inter"
+            android:fontFamily="sans-serif"
             android:layout_marginBottom="20dp"/>
 
         <!-- Terms and Conditions Checkbox -->
@@ -122,19 +134,23 @@
 
             <CheckBox
                 android:id="@+id/termsCheckBox"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:button="@drawable/cb_selector" />
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:button="@drawable/cb_selector"
+                android:contentDescription="Agree to Terms and Conditions"/>
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:text="I agree to Terms &amp; Conditions"
                 android:textColor="#000000"
                 android:textSize="14sp"
-                android:fontFamily="inter"
-                android:paddingLeft="12dp"
+                android:fontFamily="sans-serif"
+                android:paddingStart="12dp"
+                android:paddingEnd="0dp"
+                android:gravity="center_vertical"
                 android:clickable="true"
+                android:focusable="true"
                 android:onClick="onTermsTextClick"/>
         </LinearLayout>
 
@@ -146,7 +162,7 @@
             android:text="Create Account"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
-            android:fontFamily="inter"
+            android:fontFamily="sans-serif"
             android:backgroundTint="#3D9970"
             android:layout_marginBottom="20dp"/>
 
@@ -162,18 +178,20 @@
                 android:text="Already have an account? "
                 android:textColor="#000000"
                 android:textSize="14sp"
-                android:fontFamily="inter"/>
+                android:fontFamily="sans-serif"/>
 
             <TextView
                 android:id="@+id/logInText"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:text="Log In"
                 android:textColor="#3D9970"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:fontFamily="inter"
-                android:clickable="true"/>
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"/>
         </LinearLayout>
 
     </LinearLayout>

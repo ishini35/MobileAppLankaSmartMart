@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 String[] words = emailName.split(" ");
                 StringBuilder capitalizedName = new StringBuilder();
                 for (String word : words) {
-                    if (word.length() > 0) {
+                    if (!word.isEmpty()) {
                         capitalizedName.append(word.substring(0, 1).toUpperCase())
                                 .append(word.substring(1).toLowerCase())
                                 .append(" ");
@@ -75,15 +75,6 @@ public class MainActivity extends AppCompatActivity {
                 userName = "User";
             }
         }
-        // In MainActivity.java, find menuNotifications click listener
-        menuNotifications.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, NotificationsActivity.class);
-                startActivity(intent);
-                profileOverlay.setVisibility(View.GONE);
-            }
-        });
 
         // Set welcome text and profile info
         welcomeText.setText("Hello, " + userName + " !");
@@ -96,117 +87,61 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // Menu icon click - show overlay
-        menuIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profileOverlay.setVisibility(View.VISIBLE);
-            }
-        });
+        menuIcon.setOnClickListener(v -> profileOverlay.setVisibility(View.VISIBLE));
 
         // Close menu
-        closeMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profileOverlay.setVisibility(View.GONE);
-            }
-        });
+        closeMenu.setOnClickListener(v -> profileOverlay.setVisibility(View.GONE));
 
         // Hide overlay when clicking outside
-        profileOverlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                profileOverlay.setVisibility(View.GONE);
-            }
-        });
+        profileOverlay.setOnClickListener(v -> profileOverlay.setVisibility(View.GONE));
 
         // Category clicks - Navigate to Products
-
-        groceriesCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProductActivity.class);
-                intent.putExtra("CATEGORY", "Groceries");
-                startActivity(intent);
-            }
+        groceriesCategory.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, ProductsActivity.class);
+            i.putExtra("CATEGORY", "Groceries");
+            startActivity(i);
         });
 
-        householdCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProductActivity.class);
-                intent.putExtra("CATEGORY", "Household");
-                startActivity(intent);
-            }
+        householdCategory.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, ProductsActivity.class);
+            i.putExtra("CATEGORY", "Household");
+            startActivity(i);
         });
 
-        personalCareCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProductActivity.class);
-                intent.putExtra("CATEGORY", "Personal Care");
-                startActivity(intent);
-            }
+        personalCareCategory.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, ProductsActivity.class);
+            i.putExtra("CATEGORY", "Personal Care");
+            startActivity(i);
         });
 
-        stationeryCategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProductActivity.class);
-                intent.putExtra("CATEGORY", "Stationery");
-                startActivity(intent);
-            }
+        stationeryCategory.setOnClickListener(v -> {
+            Intent i = new Intent(MainActivity.this, ProductsActivity.class);
+            i.putExtra("CATEGORY", "Stationery");
+            startActivity(i);
         });
 
         // Bottom Navigation
+        navHome.setOnClickListener(v ->
+                Toast.makeText(MainActivity.this, "Already on Home", Toast.LENGTH_SHORT).show());
 
-        navHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Already on home
-                Toast.makeText(MainActivity.this, "Already on Home", Toast.LENGTH_SHORT).show();
-            }
-        });
+        navCategories.setOnClickListener(v ->
+                Toast.makeText(MainActivity.this, "Categories", Toast.LENGTH_SHORT).show());
 
-        navCategories.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: Create CategoriesActivity
-                Toast.makeText(MainActivity.this, "Categories", Toast.LENGTH_SHORT).show();
-            }
-        });
+        navCart.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, CartActivity.class)));
 
-        navCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CartActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        navProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
-        });
+        navProfile.setOnClickListener(v ->
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
 
         // Profile Menu Items
-
-        menuNotifications.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Notifications", Toast.LENGTH_SHORT).show();
-                profileOverlay.setVisibility(View.GONE);
-            }
+        menuNotifications.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, NotificationsActivity.class));
+            profileOverlay.setVisibility(View.GONE);
         });
 
-        menuSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
-                profileOverlay.setVisibility(View.GONE);
-            }
+        menuSettings.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            profileOverlay.setVisibility(View.GONE);
         });
 
         menuBarcode.setOnClickListener(v -> {
@@ -214,15 +149,9 @@ public class MainActivity extends AppCompatActivity {
             profileOverlay.setVisibility(View.GONE);
         });
 
-        menuOrderHistory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Order History", Toast.LENGTH_SHORT).show();
-                profileOverlay.setVisibility(View.GONE);
-            }
-
-
-
+        menuOrderHistory.setOnClickListener(v -> {
+            startActivity(new Intent(MainActivity.this, OrderConfirmationActivity.class));
+            profileOverlay.setVisibility(View.GONE);
         });
     }
 }

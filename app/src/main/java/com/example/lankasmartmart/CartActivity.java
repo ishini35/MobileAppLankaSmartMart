@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.database.Cursor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -25,9 +26,9 @@ public class CartActivity extends AppCompatActivity {
     View backBtn, emptyCartLayout, cartContentLayout;
 
     DatabaseHelper dbHelper;
-    int userId; // CHANGED: Now using INTEGER user ID
+    int userId;
     String userName, userEmail;
-    double deliveryFee = 150.00; // CHANGED: Match CheckoutActivity
+    double deliveryFee = 150.00;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +37,10 @@ public class CartActivity extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
 
-        // Get user ID from SharedPreferences (consistent with other activities)
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         userId = prefs.getInt("USER_ID", -1);
         userEmail = prefs.getString("USER_EMAIL", "");
 
-        // Get user name from intent or SharedPreferences
         Intent intent = getIntent();
         userName = intent.getStringExtra("USER_NAME");
         if (userName == null || userName.isEmpty()) {
@@ -60,29 +59,19 @@ public class CartActivity extends AppCompatActivity {
 
         // Setup RecyclerView
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        cartAdapter = new CartAdapter(this, cartItems, new CartAdapter.CartUpdateListener() {
-            @Override
-            public void onCartUpdated() {
-                loadCart();
-            }
-        }, dbHelper, userId);
+        cartAdapter = new CartAdapter(this, cartItems, () -> loadCart(), dbHelper, userId);
         cartRecyclerView.setAdapter(cartAdapter);
 
-        deliveryFeeText.setText("LKR " + String.format("%.2f", deliveryFee));
+        deliveryFeeText.setText(getString(R.string.price_format, deliveryFee));
 
-        // Back button
         backBtn.setOnClickListener(v -> finish());
 
-        // Checkout button
-        checkoutBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!cartItems.isEmpty()) {
-                    Intent checkoutIntent = new Intent(CartActivity.this, CheckoutActivity.class);
-                    startActivity(checkoutIntent);
-                } else {
-                    Toast.makeText(CartActivity.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
-                }
+        checkoutBtn.setOnClickListener(v -> {
+            if (!cartItems.isEmpty()) {
+                Intent checkoutIntent = new Intent(CartActivity.this, CheckoutActivity.class);
+                startActivity(checkoutIntent);
+            } else {
+                Toast.makeText(CartActivity.this, "Your cart is empty", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -98,28 +87,38 @@ public class CartActivity extends AppCompatActivity {
     private void loadCart() {
         cartItems.clear();
 
-        // Get cart items from database
         Cursor cursor = dbHelper.getCartItems(userId);
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                int productId = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CART_PRODUCT_ID));
-                String productName = cursor.getString(cursor.getColumnIndex("product_name"));
-                double price = cursor.getDouble(cursor.getColumnIndex("product_price"));
-                int quantity = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.CART_QUANTITY));
-                String imageUrl = cursor.getString(cursor.getColumnIndex("product_image"));
+                // Fix: check column index before using it
+                int colProductId   = cursor.getColumnIndex(DatabaseHelper.CART_PRODUCT_ID);
+                int colName        = cursor.getColumnIndex("product_name");
+                int colPrice       = cursor.getColumnIndex("product_price");
+                int colQuantity    = cursor.getColumnIndex(DatabaseHelper.CART_QUANTITY);
+                int colImage       = cursor.getColumnIndex("product_image");
 
-                CartItem item = new CartItem(productId, productName, price, quantity, imageUrl);
-                cartItems.add(item);
+                if (colProductId < 0 || colName < 0 || colPrice < 0
+                        || colQuantity < 0 || colImage < 0) {
+                    continue; // skip row if any column is missing
+                }
+
+                int productId       = cursor.getInt(colProductId);
+                String productName  = cursor.getString(colName);
+                double price        = cursor.getDouble(colPrice);
+                int quantity        = cursor.getInt(colQuantity);
+                String imageUrl     = cursor.getString(colImage);
+
+                cartItems.add(new CartItem(productId, productName, price, quantity, imageUrl));
 
             } while (cursor.moveToNext());
             cursor.close();
         }
 
+        // Use specific change events where possible; notifyDataSetChanged as last resort
         cartAdapter.notifyDataSetChanged();
         updateSummary();
 
-        // Show/hide empty cart message
         if (cartItems.isEmpty()) {
             emptyCartLayout.setVisibility(View.VISIBLE);
             cartContentLayout.setVisibility(View.GONE);
@@ -131,14 +130,13 @@ public class CartActivity extends AppCompatActivity {
 
     private void updateSummary() {
         double subtotal = 0.0;
-
         for (CartItem item : cartItems) {
             subtotal += item.getPrice() * item.getQuantity();
         }
-
         double total = subtotal + deliveryFee;
 
-        subtotalText.setText("LKR " + String.format("%.2f", subtotal));
-        totalText.setText("LKR " + String.format("%.2f", total));
+        // Fix: use Locale.getDefault() and getString for formatted currency text
+        subtotalText.setText(String.format(Locale.getDefault(), "LKR %.2f", subtotal));
+        totalText.setText(String.format(Locale.getDefault(), "LKR %.2f", total));
     }
 }

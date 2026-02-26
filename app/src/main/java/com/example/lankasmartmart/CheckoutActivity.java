@@ -71,7 +71,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                // ✅ FIXED: safe getColumnIndex with null check
                 int typeCol = cursor.getColumnIndex(DatabaseHelper.ADDRESS_TYPE);
                 if (typeCol < 0) break;
 
@@ -103,7 +102,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                // ✅ FIXED: safe getColumnIndex checks before using values
                 int priceCol    = cursor.getColumnIndex("product_price");
                 int quantityCol = cursor.getColumnIndex(DatabaseHelper.CART_QUANTITY);
 
@@ -142,8 +140,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
     private void selectPaymentMethod(String method) {
         selectedPaymentMethod = method;
-
-        // Reset all
         paymentCODIcon.setImageResource(android.R.drawable.radiobutton_off_background);
         paymentCODIcon.clearColorFilter();
         paymentCardIcon.setImageResource(android.R.drawable.radiobutton_off_background);
@@ -182,7 +178,6 @@ public class CheckoutActivity extends AppCompatActivity {
 
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    // ✅ FIXED: safe column index checks
                     int productIdCol = cursor.getColumnIndex(DatabaseHelper.CART_PRODUCT_ID);
                     int quantityCol  = cursor.getColumnIndex(DatabaseHelper.CART_QUANTITY);
                     int priceCol     = cursor.getColumnIndex("product_price");

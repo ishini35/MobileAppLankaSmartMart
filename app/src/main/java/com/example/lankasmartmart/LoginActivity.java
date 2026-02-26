@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         forgotPasswordText = findViewById(R.id.forgotPasswordText);
         googleSignInText = findViewById(R.id.googleSignInText);
 
-        // Gradient (unchanged)
+        // Gradient
         appTitleText = findViewById(R.id.appTitleText);
         TextPaint paint = appTitleText.getPaint();
         float width = paint.measureText("Lanka Smart Mart");

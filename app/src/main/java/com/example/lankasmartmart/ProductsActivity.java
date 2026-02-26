@@ -64,7 +64,6 @@ public class ProductsActivity extends AppCompatActivity {
                 Toast.makeText(this, "Categories", Toast.LENGTH_SHORT).show()
         );
 
-        // ✅ FIXED: uses ProductsActivity.this (not ProductListActivity.this)
         navCart.setOnClickListener(v -> {
             Intent intent = new Intent(ProductsActivity.this, CartActivity.class);
             startActivity(intent);
@@ -123,7 +122,6 @@ public class ProductsActivity extends AppCompatActivity {
 
     // Call this from adapter when "Add to Cart" is clicked
     public void addToCart(Product product) {
-        // TODO: Save to database
         Toast.makeText(this, product.getName() + " added to cart!", Toast.LENGTH_SHORT).show();
     }
 }

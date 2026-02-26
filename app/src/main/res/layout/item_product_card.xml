@@ -61,7 +61,7 @@
             android:textStyle="bold"
             android:layout_marginTop="4dp"/>
 
-        <!-- Add to Cart Button: 48dp height, wrap_content width, darker text -->
+        <!-- Add to Cart Button -->
         <Button
             android:id="@+id/btnAddToCart"
             android:layout_width="wrap_content"

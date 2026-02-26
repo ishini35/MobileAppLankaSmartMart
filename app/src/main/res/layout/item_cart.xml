@@ -115,7 +115,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Delete Button: 48dp touch target, higher contrast color -->
+        <!-- Delete Button -->
         <ImageView
             android:id="@+id/btnDelete"
             android:layout_width="48dp"

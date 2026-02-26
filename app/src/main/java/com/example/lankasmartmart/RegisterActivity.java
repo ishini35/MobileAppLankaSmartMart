@@ -40,7 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton          = findViewById(R.id.registerButton);
         logInText               = findViewById(R.id.logInText);
 
-        // Gradient (unchanged)
+        // Gradient
         appTitleText = findViewById(R.id.appTitleText);
         TextPaint paint = appTitleText.getPaint();
         float width = paint.measureText("Lanka Smart Mart");
@@ -102,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // Save to database - plain text password!
+                // Save to database - plain text password
                 boolean success = databaseHelper.addUser(
                         name,
                         email,
@@ -140,7 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    // Terms checkbox toggle (unchanged)
+    // Terms checkbox toggle
     public void onTermsTextClick(View view) {
         termsCheckBox.setChecked(!termsCheckBox.isChecked());
     }

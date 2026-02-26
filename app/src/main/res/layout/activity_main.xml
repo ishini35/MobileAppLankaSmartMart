@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Green Header with Gradient - Moved Down -->
+            <!-- Green Header with Gradient -->
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="240dp"
@@ -38,7 +38,7 @@
                     android:textStyle="bold"
                     android:layout_alignParentStart="true" />
 
-                <!-- Menu Icon (Grid) -->
+                <!-- Menu Icon -->
                 <ImageView
                     android:id="@+id/menuIcon"
                     android:layout_width="40dp"
@@ -103,7 +103,7 @@
                 android:background="@drawable/banner_background"
                 android:padding="20dp">
 
-                <!-- Festive Icon (Left) -->
+                <!-- Festive Icon -->
                 <ImageView
                     android:id="@+id/bannerIcon"
                     android:layout_width="60dp"
@@ -139,7 +139,7 @@
                         android:layout_marginTop="4dp" />
                 </LinearLayout>
 
-                <!-- SALE Badge (Top Right) - Text INSIDE Badge -->
+                <!-- SALE Badge -->
                 <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -163,7 +163,7 @@
                 </FrameLayout>
             </RelativeLayout>
 
-            <!-- Shop by Category Section - Increased Height -->
+            <!-- Shop by Category Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -184,7 +184,7 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Category Grid (2x2) - Increased Card Height -->
+                <!-- Category Grid -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -329,7 +329,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation - Moved Up with Shadow -->
+    <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"

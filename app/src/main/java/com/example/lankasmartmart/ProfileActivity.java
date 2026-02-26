@@ -90,7 +90,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (cursor != null && cursor.moveToFirst()) {
             try {
-                // ✅ FIXED: Using getColumnIndexOrThrow instead of getColumnIndex
                 String name = cursor.getString(cursor.getColumnIndexOrThrow("full_name"));
                 String email = cursor.getString(cursor.getColumnIndexOrThrow("email"));
                 String phone = cursor.getString(cursor.getColumnIndexOrThrow("phone"));
@@ -103,7 +102,6 @@ public class ProfileActivity extends AppCompatActivity {
                 if (phone != null && !phone.isEmpty()) {
                     userPhone.setText(phone);
                 } else {
-                    // ✅ FIXED: Using string resource
                     userPhone.setText(R.string.not_provided);
                 }
 
@@ -124,7 +122,6 @@ public class ProfileActivity extends AppCompatActivity {
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 do {
-                    // ✅ FIXED: Using getColumnIndexOrThrow
                     String type = cursor.getString(cursor.getColumnIndexOrThrow("type"));
                     String addressLine = cursor.getString(cursor.getColumnIndexOrThrow("address_line"));
                     String city = cursor.getString(cursor.getColumnIndexOrThrow("city"));
@@ -144,15 +141,12 @@ public class ProfileActivity extends AppCompatActivity {
                 cursor.close();
             }
         } else {
-            // ✅ FIXED: Using string resources
             homeAddress.setText(R.string.no_home_address);
             officeAddress.setText(R.string.no_office_address);
         }
     }
 
     private void setupListeners() {
-        // ✅ MODERN: Using lambda expressions
-
         // Back button
         btnBack.setOnClickListener(v -> finish());
 

@@ -354,7 +354,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         long result;
         if (cursor.getCount() > 0 && cursor.moveToFirst()) {
-            // FIXED: Check if column exists before getting value
             int quantityIndex = cursor.getColumnIndex(CART_QUANTITY);
             if (quantityIndex != -1) {
                 int currentQty = cursor.getInt(quantityIndex);

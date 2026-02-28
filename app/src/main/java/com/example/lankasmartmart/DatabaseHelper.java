@@ -11,7 +11,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Info
     private static final String DATABASE_NAME = "LankaSmartMart.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Table Names
     public static final String TABLE_USERS = "users";
@@ -34,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String PRODUCT_ID = "product_id";
     public static final String PRODUCT_NAME = "product_name";
     public static final String PRODUCT_PRICE = "price";
-    public static final String PRODUCT_CATEGORY = "category";
+    public static final String PRODUCT_CATEGORY_ID = "category_id";
     public static final String PRODUCT_DESCRIPTION = "description";
     public static final String PRODUCT_IMAGE = "image_url";
     public static final String PRODUCT_STOCK = "stock";
@@ -79,6 +79,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        // Enable Foreign Key support
+        db.execSQL("PRAGMA foreign_keys = ON;");
+
         // Create USERS table
         db.execSQL("CREATE TABLE " + TABLE_USERS + " ("
                 + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -92,19 +95,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Create CATEGORIES table
         db.execSQL("CREATE TABLE " + TABLE_CATEGORIES + " ("
                 + CATEGORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + CATEGORY_NAME + " TEXT NOT NULL, "
+                + CATEGORY_NAME + " TEXT NOT NULL UNIQUE, "
                 + CATEGORY_ICON + " TEXT"
                 + ")");
 
-        // Create PRODUCTS table
         db.execSQL("CREATE TABLE " + TABLE_PRODUCTS + " ("
                 + PRODUCT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + PRODUCT_NAME + " TEXT NOT NULL, "
                 + PRODUCT_PRICE + " REAL NOT NULL, "
-                + PRODUCT_CATEGORY + " TEXT, "
+                + PRODUCT_CATEGORY_ID + " INTEGER, "
                 + PRODUCT_DESCRIPTION + " TEXT, "
                 + PRODUCT_IMAGE + " TEXT, "
-                + PRODUCT_STOCK + " INTEGER DEFAULT 0"
+                + PRODUCT_STOCK + " INTEGER DEFAULT 0, "
+                + "FOREIGN KEY(" + PRODUCT_CATEGORY_ID + ") REFERENCES "
+                + TABLE_CATEGORIES + "(" + CATEGORY_ID + ")"
                 + ")");
 
         // Create ORDERS table
@@ -154,10 +158,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + TABLE_PRODUCTS + "(" + PRODUCT_ID + ")"
                 + ")");
 
-        // Insert default data
+        // Insert default data — categories MUST come before products
         insertDefaultCategories(db);
         insertSampleProducts(db);
-        insertSampleAddresses(db);
     }
 
     @Override
@@ -172,7 +175,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Insert default categories
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        if (!db.isReadOnly()) {
+            db.execSQL("PRAGMA foreign_keys = ON;");
+        }
+    }
+
     private void insertDefaultCategories(SQLiteDatabase db) {
         String[] categories = {"Groceries", "Household", "Personal Care", "Stationery"};
         String[] icons = {"🛒", "🏠", "💄", "📝"};
@@ -183,71 +193,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(CATEGORY_ICON, icons[i]);
             db.insert(TABLE_CATEGORIES, null, values);
         }
+        // After insert: Groceries=1, Household=2, Personal Care=3, Stationery=4
     }
 
-    // Insert sample products
     private void insertSampleProducts(SQLiteDatabase db) {
-        String[][] products = {
-                // Groceries
-                {"Basmati Rice - 1kg", "350.00", "Groceries", "Premium quality rice", "product_rice", "100"},
-                {"Fresh Milk (1L)", "250.00", "Groceries", "Farm fresh daily milk", "", "50"},
-                {"Free Range Eggs (12pcs)", "450.00", "Groceries", "Organic eggs", "", "30"},
-                {"Coconut Oil 1L", "350.00", "Groceries", "Pure coconut oil", "", "40"},
+        // {name, price, category_id, description, image_url, stock}
+        // category_id: 1=Groceries, 2=Household, 3=Personal Care, 4=Stationery
+        Object[][] products = {
+                // Groceries (category_id = 1)
+                {"Basmati Rice - 1kg",      350.00, 1, "Premium quality rice",       "product_rice", 100},
+                {"Fresh Milk (1L)",         250.00, 1, "Farm fresh daily milk",       "",             50},
+                {"Free Range Eggs (12pcs)", 450.00, 1, "Organic eggs",               "",             30},
+                {"Coconut Oil 1L",          350.00, 1, "Pure coconut oil",            "",             40},
 
-                // Household
-                {"Dish Soap (500ml)", "180.00", "Household", "Lemon scented", "", "60"},
-                {"Washing Powder 1kg", "280.00", "Household", "Strong cleaning powder", "", "45"},
-                {"Floor Cleaner (1L)", "320.00", "Household", "Pine fresh", "", "35"},
+                // Household (category_id = 2)
+                {"Dish Soap (500ml)",       180.00, 2, "Lemon scented",              "",             60},
+                {"Washing Powder 1kg",      280.00, 2, "Strong cleaning powder",     "",             45},
+                {"Floor Cleaner (1L)",      320.00, 2, "Pine fresh",                 "",             35},
 
-                // Personal Care
-                {"Shampoo 200ml", "320.00", "Personal Care", "Herbal shampoo", "", "55"},
-                {"Toothpaste", "220.00", "Personal Care", "Whitening formula", "", "70"},
-                {"Body Soap (3-pack)", "350.00", "Personal Care", "Moisturizing", "", "40"},
+                // Personal Care (category_id = 3)
+                {"Shampoo 200ml",           320.00, 3, "Herbal shampoo",             "",             55},
+                {"Toothpaste",              220.00, 3, "Whitening formula",          "",             70},
+                {"Body Soap (3-pack)",      350.00, 3, "Moisturizing",               "",             40},
 
-                // Stationery
-                {"Note Book A4", "150.00", "Stationery", "80 pages ruled notebook", "", "80"},
-                {"Ball Pens (Pack of 10)", "350.00", "Stationery", "Blue ink", "", "100"},
-                {"A4 Paper (500 sheets)", "950.00", "Stationery", "Premium quality", "", "25"}
+                // Stationery (category_id = 4)
+                {"Note Book A4",            150.00, 4, "80 pages ruled notebook",    "",             80},
+                {"Ball Pens (Pack of 10)",  350.00, 4, "Blue ink",                   "",             100},
+                {"A4 Paper (500 sheets)",   950.00, 4, "Premium quality",            "",             25}
         };
 
-        for (String[] product : products) {
+        for (Object[] product : products) {
             ContentValues values = new ContentValues();
-            values.put(PRODUCT_NAME, product[0]);
-            values.put(PRODUCT_PRICE, Double.parseDouble(product[1]));
-            values.put(PRODUCT_CATEGORY, product[2]);
-            values.put(PRODUCT_DESCRIPTION, product[3]);
-            values.put(PRODUCT_IMAGE, product[4]);
-            values.put(PRODUCT_STOCK, Integer.parseInt(product[5]));
+            values.put(PRODUCT_NAME,        (String) product[0]);
+            values.put(PRODUCT_PRICE,       (Double) product[1]);
+            values.put(PRODUCT_CATEGORY_ID, (Integer) product[2]);
+            values.put(PRODUCT_DESCRIPTION, (String) product[3]);
+            values.put(PRODUCT_IMAGE,       (String) product[4]);
+            values.put(PRODUCT_STOCK,       (Integer) product[5]);
             db.insert(TABLE_PRODUCTS, null, values);
         }
     }
-
-    // Insert sample addresses
-    private void insertSampleAddresses(SQLiteDatabase db) {
-        ContentValues homeAddress = new ContentValues();
-        homeAddress.put(ADDRESS_USER_ID, 1);
-        homeAddress.put(ADDRESS_TYPE, "Home");
-        homeAddress.put(ADDRESS_LINE, "123, Galle Road");
-        homeAddress.put(ADDRESS_CITY, "Colombo 03");
-        db.insert(TABLE_ADDRESSES, null, homeAddress);
-
-        ContentValues officeAddress = new ContentValues();
-        officeAddress.put(ADDRESS_USER_ID, 1);
-        officeAddress.put(ADDRESS_TYPE, "Office");
-        officeAddress.put(ADDRESS_LINE, "45, Duplication Road");
-        officeAddress.put(ADDRESS_CITY, "Colombo 04");
-        db.insert(TABLE_ADDRESSES, null, officeAddress);
-    }
-
     // USER OPERATIONS
 
     public boolean addUser(String name, String email, String password, String phone) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put(USER_NAME, name);
         values.put(USER_EMAIL, email);
-        values.put(USER_PASSWORD, password);
+        values.put(USER_PASSWORD, password); // ⚠️ Note: hash passwords in production
         values.put(USER_PHONE, phone);
 
         long result = db.insert(TABLE_USERS, null, values);
@@ -263,7 +256,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + USER_PASSWORD + " = ?",
                 new String[]{email, password}
         );
-
         boolean exists = cursor.getCount() > 0;
         cursor.close();
         db.close();
@@ -273,11 +265,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean checkEmailExists(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
-                "SELECT * FROM " + TABLE_USERS
-                        + " WHERE " + USER_EMAIL + " = ?",
+                "SELECT * FROM " + TABLE_USERS + " WHERE " + USER_EMAIL + " = ?",
                 new String[]{email}
         );
-
         boolean exists = cursor.getCount() > 0;
         cursor.close();
         db.close();
@@ -287,8 +277,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getUserByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
-                "SELECT * FROM " + TABLE_USERS
-                        + " WHERE " + USER_EMAIL + " = ?",
+                "SELECT * FROM " + TABLE_USERS + " WHERE " + USER_EMAIL + " = ?",
                 new String[]{email}
         );
     }
@@ -296,13 +285,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int getUserId(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         int userId = -1;
-
         Cursor cursor = db.rawQuery(
-                "SELECT " + USER_ID + " FROM " + TABLE_USERS
-                        + " WHERE " + USER_EMAIL + " = ?",
+                "SELECT " + USER_ID + " FROM " + TABLE_USERS + " WHERE " + USER_EMAIL + " = ?",
                 new String[]{email}
         );
-
         if (cursor.moveToFirst()) {
             int columnIndex = cursor.getColumnIndex(USER_ID);
             if (columnIndex != -1) {
@@ -311,7 +297,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
-
         return userId;
     }
 
@@ -322,33 +307,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM " + TABLE_PRODUCTS, null);
     }
 
-    public Cursor getProductsByCategory(String category) {
+    public Cursor getProductsByCategoryId(int categoryId) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
                 "SELECT * FROM " + TABLE_PRODUCTS
-                        + " WHERE " + PRODUCT_CATEGORY + " = ?",
-                new String[]{category}
+                        + " WHERE " + PRODUCT_CATEGORY_ID + " = ?",
+                new String[]{String.valueOf(categoryId)}
         );
     }
 
     public Cursor getProductById(int productId) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
-                "SELECT * FROM " + TABLE_PRODUCTS
-                        + " WHERE " + PRODUCT_ID + " = ?",
+                "SELECT * FROM " + TABLE_PRODUCTS + " WHERE " + PRODUCT_ID + " = ?",
                 new String[]{String.valueOf(productId)}
         );
     }
 
-    //  CART OPERATIONS
+    // CART OPERATIONS
 
     public long addToCart(int userId, int productId, int quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         Cursor cursor = db.rawQuery(
                 "SELECT * FROM " + TABLE_CART
-                        + " WHERE " + CART_USER_ID + " = ? AND "
-                        + CART_PRODUCT_ID + " = ?",
+                        + " WHERE " + CART_USER_ID + " = ? AND " + CART_PRODUCT_ID + " = ?",
                 new String[]{String.valueOf(userId), String.valueOf(productId)}
         );
 
@@ -356,12 +338,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.getCount() > 0 && cursor.moveToFirst()) {
             int quantityIndex = cursor.getColumnIndex(CART_QUANTITY);
             if (quantityIndex != -1) {
-                int currentQty = cursor.getInt(quantityIndex);
-                int newQty = currentQty + quantity;
-
+                int newQty = cursor.getInt(quantityIndex) + quantity;
                 ContentValues values = new ContentValues();
                 values.put(CART_QUANTITY, newQty);
-
                 result = db.update(TABLE_CART, values,
                         CART_USER_ID + "=? AND " + CART_PRODUCT_ID + "=?",
                         new String[]{String.valueOf(userId), String.valueOf(productId)});
@@ -373,7 +352,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(CART_USER_ID, userId);
             values.put(CART_PRODUCT_ID, productId);
             values.put(CART_QUANTITY, quantity);
-
             result = db.insert(TABLE_CART, null, values);
         }
         cursor.close();
@@ -384,7 +362,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getCartItems(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT c.*, "
-                + "c." + CART_PRODUCT_ID + " as " + CART_PRODUCT_ID + ", "
                 + "p." + PRODUCT_NAME + " as product_name, "
                 + "p." + PRODUCT_PRICE + " as product_price, "
                 + "p." + PRODUCT_IMAGE + " as product_image "
@@ -402,7 +379,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         + " WHERE " + CART_USER_ID + "=?",
                 new String[]{String.valueOf(userId)}
         );
-
         int count = 0;
         if (cursor.moveToFirst()) {
             count = cursor.getInt(0);
@@ -414,7 +390,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean updateCartQuantity(int userId, int productId, int quantity) {
         SQLiteDatabase db = this.getWritableDatabase();
-
         if (quantity <= 0) {
             int rows = db.delete(TABLE_CART,
                     CART_USER_ID + "=? AND " + CART_PRODUCT_ID + "=?",
@@ -424,7 +399,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else {
             ContentValues values = new ContentValues();
             values.put(CART_QUANTITY, quantity);
-
             int rows = db.update(TABLE_CART, values,
                     CART_USER_ID + "=? AND " + CART_PRODUCT_ID + "=?",
                     new String[]{String.valueOf(userId), String.valueOf(productId)});
@@ -446,7 +420,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public long addOrder(int userId, double totalPrice) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put(ORDER_USER_ID, userId);
         values.put(ORDER_TOTAL, totalPrice);
         values.put(ORDER_STATUS, "pending");
@@ -459,7 +432,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean addOrderItem(int orderId, int productId, int quantity, double price) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put(ITEM_ORDER_ID, orderId);
         values.put(ITEM_PRODUCT_ID, productId);
         values.put(ITEM_QUANTITY, quantity);
@@ -468,6 +440,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = db.insert(TABLE_ORDER_ITEMS, null, values);
         db.close();
         return result != -1;
+    }
+
+    public boolean updateOrderStatus(int orderId, String status) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ORDER_STATUS, status);
+        int rows = db.update(TABLE_ORDERS, values, ORDER_ID + "=?",
+                new String[]{String.valueOf(orderId)});
+        db.close();
+        return rows > 0;
     }
 
     public Cursor getUserOrders(int userId) {
@@ -495,7 +477,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public long addAddress(int userId, String type, String addressLine, String city) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put(ADDRESS_USER_ID, userId);
         values.put(ADDRESS_TYPE, type);
         values.put(ADDRESS_LINE, addressLine);
@@ -509,8 +490,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getUserAddresses(int userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
-                "SELECT * FROM " + TABLE_ADDRESSES
-                        + " WHERE " + ADDRESS_USER_ID + " = ?",
+                "SELECT * FROM " + TABLE_ADDRESSES + " WHERE " + ADDRESS_USER_ID + " = ?",
                 new String[]{String.valueOf(userId)}
         );
     }
@@ -518,7 +498,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean updateAddress(int addressId, String type, String addressLine, String city) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put(ADDRESS_TYPE, type);
         values.put(ADDRESS_LINE, addressLine);
         values.put(ADDRESS_CITY, city);
@@ -536,7 +515,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return rows > 0;
     }
-
     // CATEGORIES OPERATIONS
 
     public Cursor getAllCategories() {
@@ -547,8 +525,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Cursor getCategoryById(int categoryId) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.rawQuery(
-                "SELECT * FROM " + TABLE_CATEGORIES
-                        + " WHERE " + CATEGORY_ID + " = ?",
+                "SELECT * FROM " + TABLE_CATEGORIES + " WHERE " + CATEGORY_ID + " = ?",
                 new String[]{String.valueOf(categoryId)}
         );
     }

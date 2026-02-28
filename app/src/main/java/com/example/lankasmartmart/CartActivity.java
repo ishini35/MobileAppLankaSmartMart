@@ -135,7 +135,7 @@ public class CartActivity extends AppCompatActivity {
         }
         double total = subtotal + deliveryFee;
 
-        // Fix: use Locale.getDefault() and getString for formatted currency text
+        // use Locale.getDefault() and getString for formatted currency text
         subtotalText.setText(String.format(Locale.getDefault(), "LKR %.2f", subtotal));
         totalText.setText(String.format(Locale.getDefault(), "LKR %.2f", total));
     }

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +18,6 @@ public class ProfileActivity extends AppCompatActivity {
     private TextView homeAddress, officeAddress;
     private LinearLayout homeAddressLayout, officeAddressLayout;
     private LinearLayout navHome, navCategories, navCart, navProfile;
-    private ImageView btnSettings;
 
     // Data
     private DatabaseHelper databaseHelper;
@@ -31,53 +29,43 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // Initialize database
         databaseHelper = new DatabaseHelper(this);
 
-        // Get current user
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        currentUserId = prefs.getInt("USER_ID", -1);
+        currentUserId    = prefs.getInt("USER_ID", -1);
         currentUserEmail = prefs.getString("USER_EMAIL", "");
 
-        // Initialize views
         initializeViews();
-
-        // Load user data
         loadUserData();
-
-        // Load addresses
         loadAddresses();
-
-        // Setup listeners
         setupListeners();
     }
 
     private void initializeViews() {
         // Top bar
         btnBack = findViewById(R.id.btnBack);
-        btnSettings = findViewById(R.id.btnSettings);
 
         // Profile info
-        profilePicture = findViewById(R.id.profilePicture);
-        userName = findViewById(R.id.userName);
-        userEmail = findViewById(R.id.userEmail);
+        profilePicture  = findViewById(R.id.profilePicture);
+        userName        = findViewById(R.id.userName);
+        userEmail       = findViewById(R.id.userEmail);
 
         // Contact info
-        userPhone = findViewById(R.id.userPhone);
+        userPhone       = findViewById(R.id.userPhone);
         userEmailDetail = findViewById(R.id.userEmailDetail);
-        userLocation = findViewById(R.id.userLocation);
+        userLocation    = findViewById(R.id.userLocation);
 
         // Addresses
-        homeAddressLayout = findViewById(R.id.homeAddressLayout);
+        homeAddressLayout   = findViewById(R.id.homeAddressLayout);
         officeAddressLayout = findViewById(R.id.officeAddressLayout);
-        homeAddress = findViewById(R.id.homeAddress);
-        officeAddress = findViewById(R.id.officeAddress);
+        homeAddress         = findViewById(R.id.homeAddress);
+        officeAddress       = findViewById(R.id.officeAddress);
 
         // Bottom navigation
-        navHome = findViewById(R.id.navHome);
+        navHome       = findViewById(R.id.navHome);
         navCategories = findViewById(R.id.navCategories);
-        navCart = findViewById(R.id.navCart);
-        navProfile = findViewById(R.id.navProfile);
+        navCart       = findViewById(R.id.navCart);
+        navProfile    = findViewById(R.id.navProfile);
     }
 
     private void loadUserData() {
@@ -90,22 +78,15 @@ public class ProfileActivity extends AppCompatActivity {
 
         if (cursor != null && cursor.moveToFirst()) {
             try {
-                String name = cursor.getString(cursor.getColumnIndexOrThrow("full_name"));
+                String name  = cursor.getString(cursor.getColumnIndexOrThrow("full_name"));
                 String email = cursor.getString(cursor.getColumnIndexOrThrow("email"));
                 String phone = cursor.getString(cursor.getColumnIndexOrThrow("phone"));
 
-                // Set user info
                 userName.setText(name);
                 userEmail.setText(email);
                 userEmailDetail.setText(email);
-
-                if (phone != null && !phone.isEmpty()) {
-                    userPhone.setText(phone);
-                } else {
-                    userPhone.setText(R.string.not_provided);
-                }
-
-                // Set default location (you can make this dynamic)
+                userPhone.setText((phone != null && !phone.isEmpty())
+                        ? phone : getString(R.string.not_provided));
                 userLocation.setText(R.string.default_location);
 
             } catch (IllegalArgumentException e) {
@@ -122,17 +103,13 @@ public class ProfileActivity extends AppCompatActivity {
         if (cursor != null && cursor.moveToFirst()) {
             try {
                 do {
-                    String type = cursor.getString(cursor.getColumnIndexOrThrow("type"));
+                    String type        = cursor.getString(cursor.getColumnIndexOrThrow("type"));
                     String addressLine = cursor.getString(cursor.getColumnIndexOrThrow("address_line"));
-                    String city = cursor.getString(cursor.getColumnIndexOrThrow("city"));
-
+                    String city        = cursor.getString(cursor.getColumnIndexOrThrow("city"));
                     String fullAddress = addressLine + ", " + city;
 
-                    if (type.equals("Home")) {
-                        homeAddress.setText(fullAddress);
-                    } else if (type.equals("Office")) {
-                        officeAddress.setText(fullAddress);
-                    }
+                    if ("Home".equals(type))   homeAddress.setText(fullAddress);
+                    else if ("Office".equals(type)) officeAddress.setText(fullAddress);
 
                 } while (cursor.moveToNext());
             } catch (IllegalArgumentException e) {
@@ -147,48 +124,36 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
-        // Back button
+        // Back button → returns to previous screen naturally
         btnBack.setOnClickListener(v -> finish());
 
-        // Settings button
-        btnSettings.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, SettingsActivity.class);
-            startActivity(intent);
-        });
-
-        // Profile picture click (edit profile)
+        // Profile picture click (edit profile placeholder)
         profilePicture.setOnClickListener(v ->
-                Toast.makeText(ProfileActivity.this, R.string.edit_profile_picture, Toast.LENGTH_SHORT).show()
-        );
+                Toast.makeText(this, R.string.edit_profile_picture, Toast.LENGTH_SHORT).show());
 
-        // Home address click
+        // Address clicks
         homeAddressLayout.setOnClickListener(v ->
-                Toast.makeText(ProfileActivity.this, R.string.edit_home_address, Toast.LENGTH_SHORT).show()
-        );
-
-        // Office address click
+                Toast.makeText(this, R.string.edit_home_address, Toast.LENGTH_SHORT).show());
         officeAddressLayout.setOnClickListener(v ->
-                Toast.makeText(ProfileActivity.this, R.string.edit_office_address, Toast.LENGTH_SHORT).show()
-        );
+                Toast.makeText(this, R.string.edit_office_address, Toast.LENGTH_SHORT).show());
 
-        // Bottom navigation
+        // Bottom Navigation
         navHome.setOnClickListener(v -> {
             Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        });
-
-        navCategories.setOnClickListener(v ->
-                Toast.makeText(ProfileActivity.this, "Categories", Toast.LENGTH_SHORT).show()
-        );
-
-        navCart.setOnClickListener(v -> {
-            Intent intent = new Intent(ProfileActivity.this, CartActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         });
+
+        navCategories.setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, ProductsActivity.class);
+            intent.putExtra("CATEGORY", "All");
+            startActivity(intent);
+        });
+
+        navCart.setOnClickListener(v ->
+                startActivity(new Intent(ProfileActivity.this, CartActivity.class)));
 
         navProfile.setOnClickListener(v ->
-                Toast.makeText(ProfileActivity.this, R.string.already_on_profile, Toast.LENGTH_SHORT).show()
-        );
+                Toast.makeText(this, R.string.already_on_profile, Toast.LENGTH_SHORT).show());
     }
 }

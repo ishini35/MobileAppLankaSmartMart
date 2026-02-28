@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout groceriesCategory, householdCategory, personalCareCategory, stationeryCategory;
     LinearLayout navHome, navCategories, navCart, navProfile;
     LinearLayout menuNotifications, menuSettings, menuBarcode, menuOrderHistory;
+    View viewProfileButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,31 +28,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Initialize views
-        welcomeText = findViewById(R.id.welcomeText);
-        searchEditText = findViewById(R.id.searchEditText);
-        menuIcon = findViewById(R.id.menuIcon);
-        closeMenu = findViewById(R.id.closeMenu);
-        profileOverlay = findViewById(R.id.profileOverlay);
-        profileName = findViewById(R.id.profileName);
-        profileEmail = findViewById(R.id.profileEmail);
+        welcomeText       = findViewById(R.id.welcomeText);
+        searchEditText    = findViewById(R.id.searchEditText);
+        menuIcon          = findViewById(R.id.menuIcon);
+        closeMenu         = findViewById(R.id.closeMenu);
+        profileOverlay    = findViewById(R.id.profileOverlay);
+        profileName       = findViewById(R.id.profileName);
+        profileEmail      = findViewById(R.id.profileEmail);
+        viewProfileButton = findViewById(R.id.viewProfileButton);
 
-        groceriesCategory = findViewById(R.id.groceriesCategory);
-        householdCategory = findViewById(R.id.householdCategory);
+        groceriesCategory    = findViewById(R.id.groceriesCategory);
+        householdCategory    = findViewById(R.id.householdCategory);
         personalCareCategory = findViewById(R.id.personalCareCategory);
-        stationeryCategory = findViewById(R.id.stationeryCategory);
+        stationeryCategory   = findViewById(R.id.stationeryCategory);
 
-        navHome = findViewById(R.id.navHome);
+        navHome       = findViewById(R.id.navHome);
         navCategories = findViewById(R.id.navCategories);
-        navCart = findViewById(R.id.navCart);
-        navProfile = findViewById(R.id.navProfile);
+        navCart       = findViewById(R.id.navCart);
+        navProfile    = findViewById(R.id.navProfile);
 
         menuNotifications = findViewById(R.id.menuNotifications);
-        menuSettings = findViewById(R.id.menuSettings);
-        menuBarcode = findViewById(R.id.menuBarcode);
-        menuOrderHistory = findViewById(R.id.menuOrderHistory);
+        menuSettings      = findViewById(R.id.menuSettings);
+        menuBarcode       = findViewById(R.id.menuBarcode);
+        menuOrderHistory  = findViewById(R.id.menuOrderHistory);
 
         // Get user data from intent
-        Intent intent = getIntent();
+        Intent intent   = getIntent();
         String userName = intent.getStringExtra("USER_NAME");
         String userEmail = intent.getStringExtra("USER_EMAIL");
 
@@ -60,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
             if (userEmail != null && !userEmail.isEmpty()) {
                 String emailName = userEmail.split("@")[0];
                 emailName = emailName.replace(".", " ").replace("_", " ");
-
                 String[] words = emailName.split(" ");
                 StringBuilder capitalizedName = new StringBuilder();
                 for (String word : words) {
@@ -79,53 +80,35 @@ public class MainActivity extends AppCompatActivity {
         // Set welcome text and profile info
         welcomeText.setText("Hello, " + userName + " !");
         profileName.setText(userName);
+        profileEmail.setText((userEmail != null && !userEmail.isEmpty()) ? userEmail : "No email provided");
 
-        if (userEmail != null && !userEmail.isEmpty()) {
-            profileEmail.setText(userEmail);
-        } else {
-            profileEmail.setText("No email provided");
-        }
-
-        // Menu icon click - show overlay
+        // Menu icon: show overlay
         menuIcon.setOnClickListener(v -> profileOverlay.setVisibility(View.VISIBLE));
 
         // Close menu
         closeMenu.setOnClickListener(v -> profileOverlay.setVisibility(View.GONE));
 
-        // Hide overlay when clicking outside
+        // Hide overlay when clicking dim background
         profileOverlay.setOnClickListener(v -> profileOverlay.setVisibility(View.GONE));
 
-        // Category clicks - Navigate to Products
-        groceriesCategory.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, ProductsActivity.class);
-            i.putExtra("CATEGORY", "Groceries");
-            startActivity(i);
+        // View Profile button in overlay → ProfileActivity
+        viewProfileButton.setOnClickListener(v -> {
+            profileOverlay.setVisibility(View.GONE);
+            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
         });
 
-        householdCategory.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, ProductsActivity.class);
-            i.putExtra("CATEGORY", "Household");
-            startActivity(i);
-        });
-
-        personalCareCategory.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, ProductsActivity.class);
-            i.putExtra("CATEGORY", "Personal Care");
-            startActivity(i);
-        });
-
-        stationeryCategory.setOnClickListener(v -> {
-            Intent i = new Intent(MainActivity.this, ProductsActivity.class);
-            i.putExtra("CATEGORY", "Stationery");
-            startActivity(i);
-        });
+        // Category cards → ProductsActivity
+        groceriesCategory.setOnClickListener(v -> openCategory("Groceries"));
+        householdCategory.setOnClickListener(v -> openCategory("Household"));
+        personalCareCategory.setOnClickListener(v -> openCategory("Personal Care"));
+        stationeryCategory.setOnClickListener(v -> openCategory("Stationery"));
 
         // Bottom Navigation
         navHome.setOnClickListener(v ->
-                Toast.makeText(MainActivity.this, "Already on Home", Toast.LENGTH_SHORT).show());
+                Toast.makeText(this, "Already on Home", Toast.LENGTH_SHORT).show());
 
-        navCategories.setOnClickListener(v ->
-                Toast.makeText(MainActivity.this, "Categories", Toast.LENGTH_SHORT).show());
+        // Categories nav now opens ProductsActivity showing all products
+        navCategories.setOnClickListener(v -> openCategory("All"));
 
         navCart.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, CartActivity.class)));
@@ -135,23 +118,32 @@ public class MainActivity extends AppCompatActivity {
 
         // Profile Menu Items
         menuNotifications.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, NotificationsActivity.class));
             profileOverlay.setVisibility(View.GONE);
+            startActivity(new Intent(MainActivity.this, NotificationsActivity.class));
         });
 
+        // Settings in overlay → SettingsActivity
         menuSettings.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             profileOverlay.setVisibility(View.GONE);
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
         });
 
         menuBarcode.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, BarcodeScannerActivity.class));
             profileOverlay.setVisibility(View.GONE);
+            startActivity(new Intent(MainActivity.this, BarcodeScannerActivity.class));
         });
 
+        // Order History → OrderHistoryActivity (not OrderConfirmationActivity)
         menuOrderHistory.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, OrderConfirmationActivity.class));
             profileOverlay.setVisibility(View.GONE);
+            startActivity(new Intent(MainActivity.this, OrderHistoryActivity.class));
         });
+    }
+
+    /** Opens ProductsActivity filtered to the given category. */
+    private void openCategory(String category) {
+        Intent i = new Intent(MainActivity.this, ProductsActivity.class);
+        i.putExtra("CATEGORY", category);
+        startActivity(i);
     }
 }

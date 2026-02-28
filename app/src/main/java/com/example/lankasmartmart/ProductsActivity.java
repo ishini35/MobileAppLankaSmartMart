@@ -2,13 +2,14 @@ package com.example.lankasmartmart;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class ProductsActivity extends AppCompatActivity {
 
     RecyclerView recyclerProducts;
     TextView tvCategoryTitle;
-    View btnBack;
+    android.view.View btnBack;
     LinearLayout navHome, navCategories, navCart, navProfile;
 
     List<Product> productList;
@@ -29,50 +30,59 @@ public class ProductsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_products);
 
         // Init views
-        recyclerProducts  = findViewById(R.id.recyclerProducts);
-        tvCategoryTitle   = findViewById(R.id.tvCategoryTitle);
-        btnBack           = findViewById(R.id.btnBack);
-        navHome           = findViewById(R.id.navHome);
-        navCategories     = findViewById(R.id.navCategories);
-        navCart           = findViewById(R.id.navCart);
-        navProfile        = findViewById(R.id.navProfile);
+        recyclerProducts = findViewById(R.id.recyclerProducts);
+        tvCategoryTitle  = findViewById(R.id.tvCategoryTitle);
+        btnBack          = findViewById(R.id.btnBack);
+        navHome          = findViewById(R.id.navHome);
+        navCategories    = findViewById(R.id.navCategories);
+        navCart          = findViewById(R.id.navCart);
+        navProfile       = findViewById(R.id.navProfile);
 
         // Get category from intent
         selectedCategory = getIntent().getStringExtra("CATEGORY");
         if (selectedCategory == null) selectedCategory = "All";
-        tvCategoryTitle.setText(selectedCategory);
+        tvCategoryTitle.setText(selectedCategory.equals("All") ? "All Products" : selectedCategory);
 
         // Load and filter products
         loadProducts();
         filterByCategory();
 
-        // Setup RecyclerView with 2 columns
+        // Setup RecyclerView with 2-column grid
         recyclerProducts.setLayoutManager(new GridLayoutManager(this, 2));
-        // TODO: set adapter once you create ProductAdapter
 
-        // Back button
+        // Wire up the adapter — product click → ProductDetailsActivity
+        ProductAdapter adapter = new ProductAdapter(this, filteredList, product -> {
+            Intent intent = new Intent(ProductsActivity.this, ProductDetailsActivity.class);
+            intent.putExtra("PRODUCT_ID",          product.getId());
+            intent.putExtra("PRODUCT_NAME",        product.getName());
+            intent.putExtra("PRODUCT_PRICE",       product.getPrice());
+            intent.putExtra("PRODUCT_CATEGORY",    product.getCategory());
+            intent.putExtra("PRODUCT_DESCRIPTION", product.getDescription());
+            intent.putExtra("PRODUCT_STOCK",       product.getStock());
+            intent.putExtra("PRODUCT_IMAGE",       product.getImageResource());
+            startActivity(intent);
+        });
+        recyclerProducts.setAdapter(adapter);
+
+        // Back button uses finish() → returns to previous screen naturally
         btnBack.setOnClickListener(v -> finish());
 
         // Bottom Navigation
         navHome.setOnClickListener(v -> {
             Intent intent = new Intent(ProductsActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         });
 
+        // FIX: Categories nav → show all products
         navCategories.setOnClickListener(v ->
-                Toast.makeText(this, "Categories", Toast.LENGTH_SHORT).show()
-        );
+                Toast.makeText(this, "Already browsing categories", Toast.LENGTH_SHORT).show());
 
-        navCart.setOnClickListener(v -> {
-            Intent intent = new Intent(ProductsActivity.this, CartActivity.class);
-            startActivity(intent);
-        });
+        navCart.setOnClickListener(v ->
+                startActivity(new Intent(ProductsActivity.this, CartActivity.class)));
 
-        navProfile.setOnClickListener(v -> {
-            Intent intent = new Intent(ProductsActivity.this, ProfileActivity.class);
-            startActivity(intent);
-        });
+        navProfile.setOnClickListener(v ->
+                startActivity(new Intent(ProductsActivity.this, ProfileActivity.class)));
     }
 
     private void loadProducts() {
@@ -118,10 +128,5 @@ public class ProductsActivity extends AppCompatActivity {
                 }
             }
         }
-    }
-
-    // Call this from adapter when "Add to Cart" is clicked
-    public void addToCart(Product product) {
-        Toast.makeText(this, product.getName() + " added to cart!", Toast.LENGTH_SHORT).show();
     }
 }

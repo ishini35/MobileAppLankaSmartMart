@@ -1,6 +1,8 @@
 package com.example.lankasmartmart;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
@@ -30,12 +32,12 @@ public class LoginActivity extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(this);
 
         // Initialize views
-        emailEditText    = findViewById(R.id.emailEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        loginButton      = findViewById(R.id.loginButton);
-        signUpText       = findViewById(R.id.signUpText);
+        emailEditText      = findViewById(R.id.emailEditText);
+        passwordEditText   = findViewById(R.id.passwordEditText);
+        loginButton        = findViewById(R.id.loginButton);
+        signUpText         = findViewById(R.id.signUpText);
         forgotPasswordText = findViewById(R.id.forgotPasswordText);
-        googleSignInText = findViewById(R.id.googleSignInText);
+        googleSignInText   = findViewById(R.id.googleSignInText);
 
         // Gradient
         appTitleText = findViewById(R.id.appTitleText);
@@ -73,15 +75,42 @@ public class LoginActivity extends AppCompatActivity {
                 boolean userExists = databaseHelper.checkUser(email, password);
 
                 if (userExists) {
-                    // SUCCESS
-                    Toast.makeText(LoginActivity.this,
-                            "Login Successful!",
-                            Toast.LENGTH_SHORT).show();
+                    // SUCCESS - Get user data from database
+                    Cursor cursor = databaseHelper.getUserByEmail(email);
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.putExtra("USER_EMAIL", email);
-                    startActivity(intent);
-                    finish();
+                    if (cursor != null && cursor.moveToFirst()) {
+                        try {
+                            // Get user details
+                            int userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id"));
+                            String userName = cursor.getString(cursor.getColumnIndexOrThrow("full_name"));
+                            String userEmail = cursor.getString(cursor.getColumnIndexOrThrow("email"));
+
+                            // Save to SharedPreferences
+                            SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = prefs.edit();
+                            editor.putInt("USER_ID", userId);
+                            editor.putString("USER_NAME", userName);
+                            editor.putString("USER_EMAIL", userEmail);
+                            editor.apply();
+
+                            cursor.close();
+
+                            // Show success message
+                            Toast.makeText(LoginActivity.this,
+                                    "Welcome, " + userName + "!",
+                                    Toast.LENGTH_SHORT).show();
+
+                            // Navigate to MainActivity
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+
+                        } catch (IllegalArgumentException e) {
+                            Toast.makeText(LoginActivity.this,
+                                    "Error loading user data",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
                 } else {
                     // FAILED

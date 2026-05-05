@@ -13,14 +13,15 @@ It is designed to solve real-world shopping needs in Sri Lanka 🇱🇰 by provi
 
 ## ✨ Key Features
 
-✔️ User Registration & Login (Firebase Authentication)  
+✔️ User Registration & Login (SQLite)  
 ✔️ Browse products by categories (Groceries, Household, Personal Care, etc.)  
 ✔️ Add to Cart & Checkout (Cash on Delivery + simulated online payment)  
 ✔️ Real-time database using Firebase Firestore  
-✔️ Push Notifications for promotions (Firebase Cloud Messaging)  
-✔️ Offline support using SQLite (cart & recently viewed items)  
-✔️ GPS-based branch suggestions  
-✔️ Camera integration (profile image / barcode scanning)  
+✔️ Push Notifications for promotions
+✔️ Offline support using SQLite (cart & recently viewed items)   
+✔️ Barcode scanning
+
+
 
 ---
 
@@ -35,12 +36,11 @@ It is designed to solve real-world shopping needs in Sri Lanka 🇱🇰 by provi
 ## 🛠️ Technologies Used
 
 - **Android Studio**
-- **Java / Kotlin (if applicable)**
+- **Java / Kotlin **
 - **Firebase Authentication**
 - **Firebase Firestore**
 - **Firebase Cloud Messaging (FCM)**
 - **SQLite Database**
-- **Google Maps / GPS Services**
 
 ---
 
@@ -64,12 +64,6 @@ Through this project, I gained hands-on experience in:
 
 ---
 
-## 🙌 Acknowledgement
-
-Big thanks to my team for the great collaboration and support throughout the project!
-
----
-
 ## 📌 Tags
 
-`#AndroidDevelopment` `#MobileApp` `#Firebase` `#SoftwareEngineering` `#UIUX` `#StudentProject` `#SriLanka` `#Portfolio`
+`#AndroidDevelopment` `#MobileApp` `#SoftwareEngineering` `#UIUX` `#StudentProject` `#SriLanka` `#Portfolio`

@@ -40,7 +40,7 @@ This project includes a complete UI/UX prototype designed using Figma.
 ## 🛠️ Technologies Used
 
 - **Android Studio**
-- **Java / Kotlin **
+- **Java / Kotlin**
 - **Firebase Authentication**
 - **Firebase Firestore**
 - **Firebase Cloud Messaging (FCM)**

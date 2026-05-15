@@ -9,6 +9,10 @@
 LankaSmartMart is a **mobile-first supermarket shopping application** developed using **Android Studio**.  
 It is designed to solve real-world shopping needs in Sri Lanka 🇱🇰 by providing a simple, fast, and convenient online shopping experience.
 
+This project includes a complete UI/UX prototype designed using Figma.
+
+🔗 Figma Prototype: https://www.figma.com/design/aNbPrijJU1fBSx1gkdacyK/LankaSmartMart-Mobile-App-Design?node-id=0-1&p=f&t=qgubgkhEWo99H3iH-0
+
 ---
 
 ## ✨ Key Features
